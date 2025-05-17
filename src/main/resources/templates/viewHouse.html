@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Chi tiết dự án</title>
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Header và Sidebar -->
+
+<header id="header" class="header fixed-top d-flex align-items-center" th:fragment="header">
+    <div class="d-flex align-items-center justify-content-between">
+        <a th:href="@{/index.html}" class="logo text-align-center">
+            <div><img th:src="@{https://staticfile.batdongsan.com.vn/images/logo/standard/red/logo.svg}" alt=""></div>
+            <div><span class="d-none d-lg-block">NiceHomelander</span></div>
+        </a>
+        <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div>
+    <div class="search-bar">
+        <form class="search-form d-flex align-items-center" method="POST" th:action="@{#}">
+            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+    </div>
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+            <li class="nav-item d-block d-lg-none">
+                <a class="nav-link nav-icon search-bar-toggle" th:href="@{#}">
+                    <i class="bi bi-search"></i>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link nav-icon" th:href="@{#}" data-bs-toggle="dropdown">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge bg-primary badge-number">4</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                    <li class="dropdown-header">
+                        You have 4 new notifications
+                        <a th:href="@{#}"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="notification-item">
+                        <i class="bi bi-exclamation-circle text-warning"></i>
+                        <div>
+                            <h4>Lorem Ipsum</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>30 min. ago</p>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="notification-item">
+                        <i class="bi bi-x-circle text-danger"></i>
+                        <div>
+                            <h4>Atque rerum nesciunt</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>1 hr. ago</p>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="notification-item">
+                        <i class="bi bi-check-circle text-success"></i>
+                        <div>
+                            <h4>Sit rerum fuga</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>2 hrs. ago</p>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="notification-item">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        <div>
+                            <h4>Dicta reprehenderit</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>4 hrs. ago</p>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="dropdown-footer">
+                        <a th:href="@{#}">Show all notifications</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link nav-icon" th:href="@{#}" data-bs-toggle="dropdown">
+                    <i class="bi bi-chat-left-text"></i>
+                    <span class="badge bg-success badge-number">3</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                    <li class="dropdown-header">
+                        You have 3 new messages
+                        <a th:href="@{#}"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="message-item">
+                        <a th:href="@{#}">
+                            <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
+                            <div>
+                                <h4>Maria Hudson</h4>
+                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                <p>4 hrs. ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="message-item">
+                        <a th:href="@{#}">
+                            <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
+                            <div>
+                                <h4>Anna Nelson</h4>
+                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                <p>6 hrs. ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="message-item">
+                        <a th:href="@{#}">
+                            <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
+                            <div>
+                                <h4>David Muldon</h4>
+                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                <p>8 hrs. ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="dropdown-footer">
+                        <a th:href="@{#}">Show all messages</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown pe-3">
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" th:href="@{#}" data-bs-toggle="dropdown">
+                    <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2">D. Khánh</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>Đoàn Duy Khánh</h6>
+                        <span>Quản lý</span>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/users-profile.html}">
+                            <i class="bi bi-person"></i>
+                            <span>Hồ sơ của tôi</span>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/users-profile.html}">
+                            <i class="bi bi-gear"></i>
+                            <span>Cài đặt</span>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/pages-faq.html}">
+                            <i class="bi bi-question-circle"></i>
+                            <span>Trợ giúp?</span>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{#}">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Đăng xuất</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<aside id="sidebar" class="sidebar" th:fragment="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/index.html}">
+                <i class="bi bi-grid"></i>
+                <span>Tổng quát</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-menu-button-wide"></i><span>Nhà đất</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{#}">
+                        <i class="bi bi-circle"></i><span>Nhà đất bán</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{#}">
+                        <i class="bi bi-circle"></i><span>Nhà đất cho thuê</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-target="#forms-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-journal-text"></i><span>Dự án</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="forms-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/project/apartments}">
+                        <i class="bi bi-circle"></i><span>Căn hộ chung cư</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/project/offices}">
+                        <i class="bi bi-circle"></i><span>Văn phòng</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/project/industrial-zones}">
+                        <i class="bi bi-circle"></i><span>Khu công nghiệp</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/project/houses}"  class="active">
+                        <i class="bi bi-circle"></i><span>Nhà ở</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Giao dịch</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Đặt phòng</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Mua đất</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Hóa đơn</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Xuất/Hủy</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-bar-chart"></i><span>Báo cáo</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="charts-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/charts-chartjs.html}">
+                        <i class="bi bi-circle"></i><span>Biểu đồ</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/charts-apexcharts.html}">
+                        <i class="bi bi-circle"></i><span>Báo cáo thị trường</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/charts-echarts.html}">
+                        <i class="bi bi-circle"></i><span>Doanh thu</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/charts-echarts.html}">
+                        <i class="bi bi-circle"></i><span>Tin tức</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" th twigs="@{#}">
+                <i class="bi bi-gem"></i><span>Đối tác</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="icons-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/icons-bootstrap.html}">
+                        <i class="bi bi-circle"></i><span>Khách hàng</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/icons-remix.html}">
+                        <i class="bi bi-circle"></i><span>Nhà cung cấp</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#staff-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Nhân viên</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="staff-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Nhân viên</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Lịch làm việc</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Chấm công</span>
+                        </aalker>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Bảng tính lương</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#sell-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Bán online</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="sell-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Website</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Facebook Fanpage</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Wiki BDS</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#money-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Sổ quỹ</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/users-profile.html}">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+    </ul>
+</aside>
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Chi tiết dự án</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/index.html}">Tổng quát</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/project/houses}">Nhà ở</a></li>
+                <li class="breadcrumb-item active">Chi tiết</li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${project.projectName}"></h5>
+                        <div class="row">
+                            <div class="container">
+                                <!-- Form thông tin dự án -->
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <!-- Mỗi hàng chứa 2 cột -->
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Loại dự án:</strong></label>
+                                                <input type="text" class="form-control" th:value="${project.projectType.typeName}" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Nhà phát triển:</strong></label>
+                                                <input type="text" class="form-control" th:value="${project.developer}" readonly>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Địa chỉ:</strong></label>
+                                                <input type="text" class="form-control"
+                                                       th:value="${project.location + ', ' + project.city + ', ' + project.state}" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Diện tích tổng:</strong></label>
+                                                <input type="text" class="form-control" th:value="${project.totalArea + ' m²'}" readonly>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Tổng số căn hộ:</strong></label>
+                                                <input type="text" class="form-control" th:value="${project.totalUnits}" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Ngày bắt đầu:</strong></label>
+                                                <input type="text" class="form-control" th:value="${project.startDate}" readonly>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Ngày hoàn thành:</strong></label>
+                                                <input type="text" class="form-control" th:value="${project.completionDate}" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Trạng thái:</strong></label>
+                                                <input type="text" class="form-control" th:value="${project.status}" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Ngày cập nhật:</strong></label>
+                                                <input type="text" class="form-control" th:value="${project.updatedAt}" readonly>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label"><strong>Ngày tạo:</strong></label>
+                                                <input type="text" class="form-control" th:value="${project.createdAt}" readonly>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <label class="form-label"><strong>Mô tả:</strong></label>
+                                                <textarea class="form-control" rows="3" readonly
+                                                          th:text="${project.description ?: 'Không có mô tả'}"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bảng bất động sản -->
+                                <div class="row mt-4">
+                                    <div class="col-12">
+                                        <h3>Danh sách bất động sản</h3>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Mã bất động sản</th>
+                                                <th>Tiêu đề</th>
+                                                <th>Giá</th>
+                                                <th>Diện tích</th>
+                                                <th>Trạng thái</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="property : ${properties}">
+                                                <td th:text="${property.propertyCode}"></td>
+                                                <td th:text="${property.title}"></td>
+                                                <td th:text="${property.price + ' VND'}"></td>
+                                                <td th:text="${property.area + ' m²'}"></td>
+                                                <td th:text="${property.status}"></td>
+                                            </tr>
+                                            <tr th:if="${properties.isEmpty()}">
+                                                <td colspan="5" class="text-center">Không có bất động sản nào thuộc dự án này.</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a th:href="@{/project/houses}" class="btn btn-secondary">Quay lại</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<a th:href="@{#}" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
+</body>
+</html>

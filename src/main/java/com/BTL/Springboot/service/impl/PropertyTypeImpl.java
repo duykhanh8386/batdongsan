@@ -1,0 +1,35 @@
+package com.BTL.Springboot.service.impl;
+
+import com.BTL.Springboot.dto.PropertyTypeDto;
+import com.BTL.Springboot.entity.PropertyType;
+import com.BTL.Springboot.mapper.PropertyTypeMapper;
+import com.BTL.Springboot.repository.PropertyTypeRepository;
+import com.BTL.Springboot.service.PropertyTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class PropertyTypeImpl implements PropertyTypeService {
+
+    @Autowired
+    private PropertyTypeRepository propertyTypeRepository;
+
+    @Autowired
+    private PropertyTypeMapper mapper;
+
+    @Override
+    public List<PropertyTypeDto> getAllPropertyTypes() {
+        return propertyTypeRepository.findAll().stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public PropertyType getPropertyTypeById(Integer typeId) {
+        return propertyTypeRepository.findById(typeId)
+                .orElseThrow(() -> new RuntimeException("PropertyType not found with id: " + typeId));
+    }
+}

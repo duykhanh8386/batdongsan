@@ -36,11 +36,6 @@ public class HibernateConfig {
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.format_sql", "true");
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
-//        hibernateProperties.setProperty("hibernate.connection.provider_class",
-//                "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
-
-        // Cấu hình bổ sung
-        hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", "false");
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "50");
         hibernateProperties.setProperty("hibernate.order_inserts", "true");
         hibernateProperties.setProperty("hibernate.order_updates", "true");

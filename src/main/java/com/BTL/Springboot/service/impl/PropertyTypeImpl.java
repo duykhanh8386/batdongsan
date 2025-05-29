@@ -1,6 +1,6 @@
 package com.BTL.Springboot.service.impl;
 
-import com.BTL.Springboot.dto.PropertyTypeDto;
+import com.BTL.Springboot.dto.response.property_type.PropertyTypeDto;
 import com.BTL.Springboot.entity.PropertyType;
 import com.BTL.Springboot.mapper.PropertyTypeMapper;
 import com.BTL.Springboot.repository.PropertyTypeRepository;

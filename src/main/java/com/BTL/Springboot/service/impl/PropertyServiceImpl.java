@@ -1,13 +1,14 @@
 package com.BTL.Springboot.service.impl;
 
-import com.BTL.Springboot.dto.PropertyDto;
-import com.BTL.Springboot.dto.request.PropertyRequest;
+import com.BTL.Springboot.dto.response.property.PropertyDto;
+import com.BTL.Springboot.dto.request.property.PropertyRequest;
 import com.BTL.Springboot.entity.Property;
 import com.BTL.Springboot.mapper.PropertyMapper;
 import com.BTL.Springboot.repository.PropertyRepository;
 import com.BTL.Springboot.service.PropertyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Get all properties
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public List<PropertyDto> getAllProperties() {
         List<Property> properties = propertyRepository.findAll();
@@ -34,6 +36,7 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Get property by ID
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public PropertyDto getPropertyById(Integer id) {
         Property property = propertyRepository.findById(id)
@@ -41,6 +44,7 @@ public class PropertyServiceImpl implements PropertyService {
         return mapper.toDto(property);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public PropertyDto getPropertyByCode(String propertyCode) {
         Property property = propertyRepository.findByPropertyCode(propertyCode)
@@ -51,6 +55,7 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Find properties by listing type and status = true
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public List<PropertyDto> findAllByListingTypeAndStatusTrue(String listingType) {
         List<Property> properties = propertyRepository.findAllByListingTypeAndStatusTrue(listingType);
@@ -60,6 +65,7 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Find properties by listing type and status
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public List<PropertyDto> findAllByListingTypeAndStatus(String listingType, String status) {
         List<Property> properties = propertyRepository.findAllByListingTypeAndStatus(listingType, status);
@@ -69,6 +75,7 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Save a property (create or update)
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public PropertyDto saveProperty(PropertyRequest request, Integer propertyId) {
         Property property = mapper.toEntity(request);
@@ -112,6 +119,7 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Update property status (soft delete)
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public void deletePropertyStatus(Integer id, String status) {
         Property property = propertyRepository.findById(id)
@@ -123,6 +131,7 @@ public class PropertyServiceImpl implements PropertyService {
     /**
      * Create a new property
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public PropertyDto createProperty(PropertyRequest request) {
         Property property = mapper.toEntity(request);

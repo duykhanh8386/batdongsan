@@ -1,47 +1,34 @@
 package com.BTL.Springboot.controller;
 
+import com.BTL.Springboot.dto.response.user.UserAccountDto;
+import com.BTL.Springboot.entity.UserAccount;
+import com.BTL.Springboot.service.UserAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HomeController {
 
+    @Autowired
+    private UserAccountService userAccountService;
+
     @GetMapping("/home")
-    public String home(HttpSession session) {
-        // Kiểm tra xem người dùng đã đăng nhập chưa
-        if (session.getAttribute("loggedInUser") == null) {
-            return "redirect:/login";
+    public ModelAndView getHomePage() {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            modelAndView.addObject("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            modelAndView.addObject("user", new Object()); // Truyền object rỗng nếu có lỗi
         }
-        return "index";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "pages-login";
-    }
-
-    @PostMapping("/login")
-    public String processLogin(@RequestParam("username") String username,
-                               @RequestParam("password") String password,
-                               Model model,
-                               HttpSession session) {
-        if ("admin@gmail.com".equals(username) && "admin".equals(password)) {
-            // Lưu thông tin đăng nhập vào session
-            session.setAttribute("loggedInUser", username);
-            return "redirect:/home";
-        } else {
-            model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng!");
-            return "pages-login";
-        }
-    }
-
-    // Thêm phương thức đăng xuất (logout) để xóa session
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        // Xóa session khi đăng xuất
-        session.invalidate();
-        return "redirect:/login";
+        modelAndView.setViewName("index");
+        return modelAndView;
     }
 }

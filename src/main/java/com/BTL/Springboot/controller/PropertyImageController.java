@@ -1,6 +1,6 @@
 package com.BTL.Springboot.controller;
 
-import com.BTL.Springboot.dto.PropertyDto;
+import com.BTL.Springboot.dto.response.property.PropertyDto;
 import com.BTL.Springboot.entity.Property;
 import com.BTL.Springboot.entity.PropertyImage;
 import com.BTL.Springboot.mapper.PropertyMapper;

@@ -1,6 +1,6 @@
 package com.BTL.Springboot.mapper;
 
-import com.BTL.Springboot.dto.ProjectDto;
+import com.BTL.Springboot.dto.response.project.ProjectDto;
 import com.BTL.Springboot.entity.Project;
 import org.springframework.stereotype.Component;
 

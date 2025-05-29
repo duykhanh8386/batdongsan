@@ -1,6 +1,6 @@
 package com.BTL.Springboot.mapper;
 
-import com.BTL.Springboot.dto.PropertyImageDto;
+import com.BTL.Springboot.dto.response.property_image.PropertyImageDto;
 import com.BTL.Springboot.entity.PropertyImage;
 
 public class PropertyImageMapper {

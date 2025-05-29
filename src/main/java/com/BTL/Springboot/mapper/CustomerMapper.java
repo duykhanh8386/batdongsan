@@ -1,6 +1,6 @@
 package com.BTL.Springboot.mapper;
 
-import com.BTL.Springboot.dto.CustomerDto;
+import com.BTL.Springboot.dto.response.customer.CustomerDto;
 import com.BTL.Springboot.entity.Customer;
 import org.springframework.stereotype.Component;
 

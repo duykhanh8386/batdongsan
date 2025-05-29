@@ -1,8 +1,11 @@
 package com.BTL.Springboot.mapper;
 
-import com.BTL.Springboot.dto.PropertyDto;
-import com.BTL.Springboot.dto.request.PropertyRequest;
-import com.BTL.Springboot.entity.Property;
+import com.BTL.Springboot.dto.response.customer.CustomerDto;
+import com.BTL.Springboot.dto.response.employee.EmployeeDto;
+import com.BTL.Springboot.dto.response.project.ProjectDto;
+import com.BTL.Springboot.dto.response.property.PropertyDto;
+import com.BTL.Springboot.dto.request.property.PropertyRequest;
+import com.BTL.Springboot.entity.*;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,21 +29,51 @@ public class PropertyMapper {
         dto.setBathrooms(property.getBathrooms());
         dto.setFloors(property.getFloors());
         dto.setYearBuilt(property.getYearBuilt());
-        dto.setIsFurnished(property.getIsFurnished());
+        dto.setIsFurnished(property.getIsFurnished() != null ? property.getIsFurnished() : false);
         dto.setListingType(property.getListingType());
         dto.setStatus(property.getStatus());
-        dto.setOwner(property.getOwner());
-        dto.setProject(property.getProject());
-        dto.setListingAgent(property.getListingAgent());
-        dto.setPropertyType(property.getPropertyType());
+        dto.setPropertyType(property.getPropertyType() != null ? property.getPropertyType() : new PropertyType());
         dto.setPropertyCode(property.getPropertyCode());
         dto.setPostalCode(property.getPostalCode());
         dto.setCreatedAt(property.getCreatedAt());
         dto.setUpdatedAt(property.getUpdatedAt());
+
+        // Ánh xạ Project
+        if (property.getProject() != null && property.getProject().getProjectId() != null) {
+            dto.setProject(new ProjectDto(
+                    property.getProject().getProjectId(),
+                    property.getProject().getProjectName()
+            ));
+        } else {
+            dto.setProject(null);
+        }
+
+        // Ánh xạ Customer (Owner)
+        if (property.getOwner() != null && property.getOwner().getCustomerId() != null) {
+            dto.setOwner(new CustomerDto(
+                    property.getOwner().getCustomerId(),
+                    property.getOwner().getFirstName(),
+                    property.getOwner().getLastName()
+            ));
+        } else {
+            dto.setOwner(null);
+        }
+
+        // Ánh xạ Employee (ListingAgent)
+        if (property.getListingAgent() != null && property.getListingAgent().getEmployeeId() != null) {
+            dto.setListingAgent(new EmployeeDto(
+                    property.getListingAgent().getEmployeeId(),
+                    property.getListingAgent().getFirstName(),
+                    property.getListingAgent().getLastName()
+            ));
+        } else {
+            dto.setListingAgent(null);
+        }
+
         return dto;
     }
 
-    // Convert Property entity to PropertyDto
+    // Convert PropertyDto to Property entity
     public Property toEntity(PropertyDto dto) {
         if (dto == null) {
             return null;
@@ -61,14 +94,39 @@ public class PropertyMapper {
         property.setIsFurnished(dto.getIsFurnished());
         property.setListingType(dto.getListingType());
         property.setStatus(dto.getStatus());
-        property.setOwner(dto.getOwner());
-        property.setProject(dto.getProject());
-        property.setListingAgent(dto.getListingAgent());
         property.setPropertyType(dto.getPropertyType());
         property.setPropertyCode(dto.getPropertyCode());
         property.setPostalCode(dto.getPostalCode());
         property.setCreatedAt(dto.getCreatedAt());
         property.setUpdatedAt(dto.getUpdatedAt());
+
+        // Ánh xạ Project
+        if (dto.getProject() != null && dto.getProject().getProjectId() != null) {
+            Project project = new Project();
+            project.setProjectId(dto.getProject().getProjectId());
+            property.setProject(project);
+        } else {
+            property.setProject(null);
+        }
+
+        // Ánh xạ Customer
+        if (dto.getOwner() != null && dto.getOwner().getCustomerId() != null) {
+            Customer customer = new Customer();
+            customer.setCustomerId(dto.getOwner().getCustomerId());
+            property.setOwner(customer);
+        } else {
+            property.setOwner(null);
+        }
+
+        // Ánh xạ Employee
+        if (dto.getListingAgent() != null && dto.getListingAgent().getEmployeeId() != null) {
+            Employee employee = new Employee();
+            employee.setEmployeeId(dto.getListingAgent().getEmployeeId());
+            property.setListingAgent(employee);
+        } else {
+            property.setListingAgent(null);
+        }
+
         return property;
     }
 
@@ -92,14 +150,39 @@ public class PropertyMapper {
         property.setIsFurnished(request.getIsFurnished());
         property.setListingType(request.getListingType());
         property.setStatus(request.getStatus());
-        property.setOwner(request.getOwner());
-        property.setProject(request.getProject());
-        property.setListingAgent(request.getListingAgent());
         property.setPropertyType(request.getPropertyType());
         property.setPropertyCode(request.getPropertyCode());
         property.setPostalCode(request.getPostalCode());
         property.setCreatedAt(request.getCreatedAt());
         property.setUpdatedAt(request.getUpdatedAt());
+
+        // Ánh xạ Project
+        if (request.getProject() != null && request.getProject().getProjectId() != null) {
+            Project project = new Project();
+            project.setProjectId(request.getProject().getProjectId());
+            property.setProject(project);
+        } else {
+            property.setProject(null);
+        }
+
+        // Ánh xạ Customer
+        if (request.getOwner() != null && request.getOwner().getCustomerId() != null) {
+            Customer customer = new Customer();
+            customer.setCustomerId(request.getOwner().getCustomerId());
+            property.setOwner(customer);
+        } else {
+            property.setOwner(null);
+        }
+
+        // Ánh xạ Employee
+        if (request.getListingAgent() != null && request.getListingAgent().getEmployeeId() != null) {
+            Employee employee = new Employee();
+            employee.setEmployeeId(request.getListingAgent().getEmployeeId());
+            property.setListingAgent(employee);
+        } else {
+            property.setListingAgent(null);
+        }
+
         return property;
     }
 
@@ -125,12 +208,37 @@ public class PropertyMapper {
         request.setIsFurnished(dto.getIsFurnished());
         request.setListingType(dto.getListingType());
         request.setStatus(dto.getStatus());
-        request.setOwner(dto.getOwner());
-        request.setListingAgent(dto.getListingAgent());
         request.setPropertyType(dto.getPropertyType());
-        request.setProject(dto.getProject());
         request.setCreatedAt(dto.getCreatedAt());
         request.setUpdatedAt(dto.getUpdatedAt());
+
+        // Ánh xạ Project
+        if (dto.getProject() != null && dto.getProject().getProjectId() != null) {
+            Project project = new Project();
+            project.setProjectId(dto.getProject().getProjectId());
+            request.setProject(project);
+        } else {
+            request.setProject(null);
+        }
+
+        // Ánh xạ Owner
+        if (dto.getOwner() != null && dto.getOwner().getCustomerId() != null) {
+            Customer customer = new Customer();
+            customer.setCustomerId(dto.getOwner().getCustomerId());
+            request.setOwner(customer);
+        } else {
+            request.setOwner(null);
+        }
+
+        // Ánh xạ ListingAgent
+        if (dto.getListingAgent() != null && dto.getListingAgent().getEmployeeId() != null) {
+            Employee employee = new Employee();
+            employee.setEmployeeId(dto.getListingAgent().getEmployeeId());
+            request.setListingAgent(employee);
+        } else {
+            request.setListingAgent(null);
+        }
+
         return request;
     }
 }

@@ -1,17 +1,22 @@
 package com.BTL.Springboot.controller;
 
-import com.BTL.Springboot.dto.ProjectDto;
-import com.BTL.Springboot.dto.PropertyDto;
-import com.BTL.Springboot.dto.PropertyTypeDto;
-import com.BTL.Springboot.dto.request.PropertyRequest;
+import com.BTL.Springboot.dto.response.customer.CustomerDto;
+import com.BTL.Springboot.dto.response.employee.EmployeeDto;
+import com.BTL.Springboot.dto.response.project.ProjectDto;
+import com.BTL.Springboot.dto.response.property.PropertyDto;
+import com.BTL.Springboot.dto.response.property_type.PropertyTypeDto;
+import com.BTL.Springboot.dto.request.property.PropertyRequest;
+import com.BTL.Springboot.dto.response.user.UserAccountDto;
 import com.BTL.Springboot.entity.Property;
 import com.BTL.Springboot.entity.PropertyImage;
+import com.BTL.Springboot.entity.PropertyType;
 import com.BTL.Springboot.mapper.PropertyMapper;
 import com.BTL.Springboot.service.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -46,15 +51,25 @@ public class PropertyController {
     private PropertyImageService propertyImageService;
 
     @Autowired
+    private UserAccountService userAccountService;
+
+    @Autowired
     private PropertyMapper mapper;
 
     @GetMapping("/for-sale")
-    public ModelAndView forSale(HttpSession session) {
-        // Kiểm tra xem người dùng đã đăng nhập chưa
-        if (session.getAttribute("loggedInUser") == null) {
-            return new ModelAndView("redirect:/login");
-        }
+    public ModelAndView forSale() {
         ModelAndView mav = new ModelAndView("house-landforsale");
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            mav.addObject("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            mav.addObject("user", new Object()); // Truyền object rỗng nếu có lỗi
+        }
         List<PropertyDto> properties = propertyService.findAllByListingTypeAndStatus("Bán", "true");
         mav.addObject("properties", properties);
         mav.addObject("property", new PropertyRequest());
@@ -66,12 +81,19 @@ public class PropertyController {
     }
 
     @GetMapping("/for-rent")
-    public ModelAndView forRent(HttpSession session) {
-        // Kiểm tra xem người dùng đã đăng nhập chưa
-        if (session.getAttribute("loggedInUser") == null) {
-            return new ModelAndView("redirect:/login");
-        }
+    public ModelAndView forRent() {
         ModelAndView mav = new ModelAndView("house-landforrent");
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            mav.addObject("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            mav.addObject("user", new Object()); // Truyền object rỗng nếu có lỗi
+        }
         List<PropertyDto> properties = propertyService.findAllByListingTypeAndStatus("Cho thuê", "true");
         mav.addObject("properties", properties);
         mav.addObject("property", new PropertyRequest());
@@ -85,12 +107,19 @@ public class PropertyController {
     @GetMapping("/detail/{id}")
     public ModelAndView detail(@PathVariable("id") Integer id,
                                @RequestHeader(value = "referer", required = false) String referer,
-                               @ModelAttribute("previousPage") String previousPage, HttpSession session) {
-        // Kiểm tra xem người dùng đã đăng nhập chưa
-        if (session.getAttribute("loggedInUser") == null) {
-            return new ModelAndView("redirect:/login");
-        }
+                               @ModelAttribute("previousPage") String previousPage) {
         ModelAndView mav = new ModelAndView("house-landdetail");
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            mav.addObject("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            mav.addObject("user", new Object()); // Truyền object rỗng nếu có lỗi
+        }
         PropertyDto property = propertyService.getPropertyById(id);
         Property propertyImage = mapper.toEntity(property);
         mav.addObject("images", propertyImageService.getImagesByProperty(propertyImage));
@@ -114,13 +143,16 @@ public class PropertyController {
     @GetMapping("/edit/{id}")
     public ModelAndView showEditForm(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes,
                                      @RequestHeader(value = "referer", required = false) String referer,
-                                     @ModelAttribute("previousPage") String previousPage, HttpSession session) {
-        // Kiểm tra xem người dùng đã đăng nhập chưa
-        if (session.getAttribute("loggedInUser") == null) {
-            return new ModelAndView("redirect:/login");
-        }
+                                     @ModelAttribute("previousPage") String previousPage) {
         ModelAndView mav = new ModelAndView("house-landdetail");
         try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            mav.addObject("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+
             PropertyDto dto = propertyService.getPropertyById(id);
             Property property = mapper.toEntity(dto);
 
@@ -161,6 +193,9 @@ public class PropertyController {
                     : determinePreviousPage(referer);
             mav.addObject("previousPage", finalPreviousPage);
         } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            mav.addObject("user", new Object()); // Truyền object rỗng nếu có lỗi
+
             log.error("Error loading edit form for property ID {}: {}", id, e.getMessage(), e);
             mav.addObject("errorMessage", "Lỗi khi tải form chỉnh sửa: " + e.getMessage());
             mav.setViewName("redirect:/properties");
@@ -367,5 +402,23 @@ public class PropertyController {
     @ResponseBody
     public List<ProjectDto> getAllProjects() {
         return projectService.getAllProjects();
+    }
+
+
+    @GetMapping("/all")
+    @ResponseBody
+    public List<PropertyDto> getAlls() {
+        return propertyService.getAllProperties();
+    }
+
+    @GetMapping("/sale")
+    @ResponseBody
+    public List<PropertyDto> getAllByListingTypeAndStatus() {
+        return propertyService.findAllByListingTypeAndStatus("Bán", "True");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPropertyById(@PathVariable Integer id) {
+        return ResponseEntity.ok(propertyService.getPropertyById(id));
     }
 }

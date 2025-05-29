@@ -1,8 +1,7 @@
 package com.BTL.Springboot.service;
 
-import com.BTL.Springboot.dto.PropertyDto;
-import com.BTL.Springboot.dto.request.PropertyRequest;
-import com.BTL.Springboot.entity.Property;
+import com.BTL.Springboot.dto.response.property.PropertyDto;
+import com.BTL.Springboot.dto.request.property.PropertyRequest;
 
 import java.util.List;
 

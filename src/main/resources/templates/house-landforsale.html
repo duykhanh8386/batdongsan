@@ -209,16 +209,18 @@
       </li><!-- End Messages Nav -->
 
       <li class="nav-item dropdown pe-3">
-
         <a class="nav-link nav-profile d-flex align-items-center pe-0" th:href="@{#}" data-bs-toggle="dropdown">
           <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block dropdown-toggle ps-2">T. Đạt</span>
-        </a><!-- End Profile Iamge Icon -->
+          <span class="d-none d-md-block dropdown-toggle ps-2"
+                th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">T. Đạt</span>
+        </a><!-- End Profile Image Icon -->
 
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
           <li class="dropdown-header">
-            <h6>Đỗ Tuấn Đạt</h6>
-            <span>Quản lý</span>
+            <h6 th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">Đỗ Tuấn Đạt</h6>
+            <span th:text="${(user != null and user.role != null) ? user.role.roleName : 'Khách'}">Quản lý</span>
           </li>
           <li>
             <hr class="dropdown-divider">
@@ -227,7 +229,7 @@
           <li>
             <a class="dropdown-item d-flex align-items-center" th:href="@{/users-profile.html}">
               <i class="bi bi-person"></i>
-              <span>Hồ sơ của tôi </span>
+              <span>Hồ sơ của tôi</span>
             </a>
           </li>
           <li>
@@ -255,12 +257,11 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{/logout}">
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/auth/logout}">
               <i class="bi bi-box-arrow-right"></i>
               <span>Đăng xuất</span>
             </a>
           </li>
-
         </ul><!-- End Profile Dropdown Items -->
       </li><!-- End Profile Nav -->
 
@@ -505,8 +506,8 @@
               </th:block>
               <div class="d-flex">
                 <!-- Nút Thêm mới -->
-                <a href="#" class="btn btn-success btn-sm ms-1" data-bs-toggle="modal" data-bs-target="#addPropertyModal">
-                  <i class="bi bi-plus-lg"></i> <span>Thêm mới</span>
+                <a href="#" class="btn btn-success ms-1" data-bs-toggle="modal" data-bs-target="#addPropertyModal">
+                  <i class="bi bi-plus-lg"></i> <span>Thêm</span>
                 </a>
                 <!-- Modal Thêm mới bất động sản -->
                 <div class="modal fade" id="addPropertyModal" tabindex="-1" aria-labelledby="addPropertyModalLabel" aria-hidden="true">
@@ -675,8 +676,53 @@
                     </div>
                   </div>
                 </div>
-                <a th:href="@{#}" class="btn btn-success btn-sm ms-1"><i class="bi bi-file-earmark-arrow-up"></i> <span>Import</span></a>
-                <a th:href="@{#}" class="btn btn-success btn-sm ms-1"><i class="bi bi-file-earmark-arrow-down"></i> <span>Xuất file</span></a>
+
+                <div class="dropdown ms-1">
+                  <a th:href="@{#}" class="btn btn-success" data-bs-toggle="dropdown">
+                    <i class="bi bi-file-earmark-arrow-up"></i> <span>Nhập</span>
+                  </a>
+
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a th:href="@{#}" class="dropdown-item btn btn-success text-center">
+                        <span>Excel</span>
+                      </a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                      <a th:href="@{#}" class="dropdown-item btn btn-success text-center">
+                        <span>PDF</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="dropdown ms-1">
+                  <a th:href="@{#}" class="btn btn-success" data-bs-toggle="dropdown">
+                    <i class="bi bi-file-earmark-arrow-down"></i> <span>Xuất</span>
+                  </a>
+
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a th:href="@{#}" class="dropdown-item btn btn-success text-center">
+                        <span>Excel</span>
+                      </a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                      <a th:href="@{#}" class="dropdown-item btn btn-success text-center">
+                        <span>PDF</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
               </div>
             </div>
             <!-- Table with stripped rows -->

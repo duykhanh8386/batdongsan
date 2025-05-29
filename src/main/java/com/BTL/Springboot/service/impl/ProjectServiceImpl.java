@@ -1,6 +1,6 @@
 package com.BTL.Springboot.service.impl;
 
-import com.BTL.Springboot.dto.ProjectDto;
+import com.BTL.Springboot.dto.response.project.ProjectDto;
 import com.BTL.Springboot.entity.Project;
 import com.BTL.Springboot.mapper.ProjectMapper;
 import com.BTL.Springboot.repository.ProjectRepository;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,5 +31,10 @@ public class ProjectServiceImpl implements ProjectService {
     public Project getProjectById(Integer projectId) {
         return projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+    }
+
+    @Override
+    public List<Project> findByProjectName(String projectName) {
+        return projectRepository.findByProjectName(projectName);
     }
 }

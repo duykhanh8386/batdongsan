@@ -225,7 +225,7 @@ CREATE TABLE roles (
 CREATE TABLE user_accounts (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     role_id INT NOT NULL,
     employee_id INT,
@@ -2260,7 +2260,7 @@ INSERT INTO roles (code, role_name, description) VALUES
 
 
 -- INSERT INTO user_accounts TABLE
-INSERT INTO user_accounts (username, password_hash, email, role_id, employee_id, customer_id, is_active) VALUES
+INSERT INTO user_accounts (username, password, email, role_id, employee_id, customer_id, is_active) VALUES
 ('admin', '$2a$10$PmeX9PTJ5lOiimRy4nuF0OiranYnWBSa2JLZ4CO1oiOtE4HAMYZpO', 'admin@niceholander.com', 1, 1, NULL, TRUE),
 ('director', '$2a$10$TiiGR1Z5m.gouXUlbk1PZ.IumESvGF7A3akhcSZJw9qyQOsOq8NFS', 'director@niceholander.com', 2, 2, NULL, TRUE),
 ('deputy_director', '$$2a$10$aE4ACt7hKIdOqZuYQfVgs.1D2DVCxIgJBsQdMwBNMaK/FA0iRp6Lq', 'deputy_director@niceholander.com', 3, 77, NULL, TRUE),

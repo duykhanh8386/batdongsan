@@ -11,4 +11,5 @@ public interface ProjectService {
     public void updateProject(int id,Project updatedProject);
     public void deleteProject(int id);
     public void saveProject(Project project);
+    public List<Project> getAll();
 }

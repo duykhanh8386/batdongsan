@@ -6,12 +6,16 @@ import com.BTL.Springboot.entity.PropertyType;
 import com.BTL.Springboot.service.Impl.ProjectServiceImpl;
 import com.BTL.Springboot.service.Impl.PropertyServiceImpl;
 import com.BTL.Springboot.service.Impl.PropertyTypeServiceImpl;
+import com.BTL.Springboot.util.ExcelExporterUtil;
+import com.BTL.Springboot.util.PDFExporterUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -72,16 +76,6 @@ public class ApartmentController {
         return "redirect:/project/apartments";
     }
 
-//    @GetMapping("/apartments/add")
-//    public String showAddForm(Model model) {
-//        Project newProject = new Project();
-//        List<PropertyType> propertyTypes = propertyTyperService.getAllPropertyType();
-//
-//        model.addAttribute("propertyTypes", propertyTypes);
-//
-//        return "addApartment";
-//    }
-
     @PostMapping("/apartments/add")
     public String addProject(@ModelAttribute("project") Project project,
                              @ModelAttribute("projectType.typeId") Integer typeId,
@@ -93,5 +87,24 @@ public class ApartmentController {
         projectService.saveProject(project);
         redirectAttributes.addFlashAttribute("successMessage", "Thêm dự án thành công!");
         return "redirect:/project/apartments";
+    }
+
+    @GetMapping("/apartments/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=apartments.xlsx");
+
+        List<Project> list = projectService.getAll();
+        ExcelExporterUtil exporter = new ExcelExporterUtil(list);
+        exporter.export(response);
+    }
+
+    @GetMapping("/apartments/export/pdf")
+    public void exportToPDF(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=apartments.pdf");
+
+        List<Project> list = projectService.getAll();
+        PDFExporterUtil.export(response, list);
     }
 }

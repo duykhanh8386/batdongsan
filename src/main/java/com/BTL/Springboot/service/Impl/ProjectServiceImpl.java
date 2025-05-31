@@ -71,4 +71,11 @@ public class ProjectServiceImpl implements ProjectService {
         project.setUpdatedAt(LocalDateTime.now());
         projectRepository.save(project);
     }
+
+    @Override
+    public List<Project> getAll() {
+        return projectRepository.findAll();
+    }
+
+
 }

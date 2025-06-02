@@ -15,7 +15,8 @@
 
     <!-- Google Fonts -->
     <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
-    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}"
+          rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -305,7 +306,7 @@
             </a>
             <ul id="forms-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/project/apartments}" class="active">
+                    <a th:href="@{/project/apartments}">
                         <i class="bi bi-circle"></i><span>Căn hộ chung cư</span>
                     </a>
                 </li>
@@ -325,7 +326,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/project/trashs}">
+                    <a th:href="@{/project/trashs}" class="active">
                         <i class="bi bi-circle"></i><span>Thùng rác</span>
                     </a>
                 </li>
@@ -334,7 +335,8 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{#}">
-                <i class="bi bi-layout-text-window-reverse"></i><span>Giao dịch</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-layout-text-window-reverse"></i><span>Giao dịch</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
@@ -408,7 +410,8 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#staff-nav" data-bs-toggle="collapse" th:href="@{#}">
-                <i class="bi bi-layout-text-window-reverse"></i><span>Nhân viên</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-layout-text-window-reverse"></i><span>Nhân viên</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="staff-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
@@ -436,7 +439,8 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#sell-nav" data-bs-toggle="collapse" th:href="@{#}">
-                <i class="bi bi-layout-text-window-reverse"></i><span>Bán online</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-layout-text-window-reverse"></i><span>Bán online</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="sell-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
@@ -477,12 +481,12 @@
 <main id="main" class="main">
 
     <div class="pagetitle">
-        <h1>Căn hộ chung cư</h1>
+        <h1>Thùng rác</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/index.html}">Tổng quát</a></li>
                 <li class="breadcrumb-item">Trang</li>
-                <li class="breadcrumb-item active">Căn hộ chung cư</li>
+                <li class="breadcrumb-item active">Thùng rác</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -500,174 +504,80 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <!-- Tiêu đề bên trái -->
-                            <h5 class="card-title mb-0">Danh sách căn hộ</h5>
-                            <div class="d-flex">
-                                <a th:href="@{#}" class="btn btn-success btn-sm me-1" data-bs-toggle="modal" data-bs-target="#addApartment">
-                                    <i class="bi bi-plus-lg"></i> <span>Thêm mới</span>
-                                </a>
-                                <div class="modal fade" id="addApartment" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="addProjectModalLabel">Thêm mới dự án</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form th:action="@{/project/apartments/add}" th:object="${project}" method="post" onsubmit="return validateForm()">
-
-                                                    <!-- Tên dự án: full width -->
-                                                    <div class="mb-3">
-                                                        <label for="projectName" class="form-label">Tên dự án</label>
-                                                        <input type="text" class="form-control" id="projectName" th:field="*{projectName}">
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="projectType" class="form-label">Loại dự án</label>
-                                                            <select class="form-select" id="projectType" name="projectType.typeId">
-                                                                <option value="" disabled selected>-- Chọn loại --</option>
-                                                                <option th:each="type : ${propertyTypes}" th:value="${type.typeId}" th:text="${type.typeName}"></option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="developer" class="form-label">Nhà phát triển</label>
-                                                            <input type="text" class="form-control" id="developer" th:field="*{developer}">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="location" class="form-label">Địa chỉ</label>
-                                                            <input type="text" class="form-control" id="location" th:field="*{location}">
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="city" class="form-label">Thành phố</label>
-                                                            <input type="text" class="form-control" id="city" th:field="*{city}">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="state" class="form-label">Tỉnh/Thành</label>
-                                                            <input type="text" class="form-control" id="state" th:field="*{state}">
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="totalArea" class="form-label">Diện tích tổng (m²)</label>
-                                                            <input type="number" step="0.01" class="form-control" id="totalArea" th:field="*{totalArea}">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="totalUnits" class="form-label">Tổng số căn hộ</label>
-                                                            <input type="number" class="form-control" id="totalUnits" th:field="*{totalUnits}">
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="status" class="form-label">Trạng thái</label>
-                                                            <select class="form-select" id="status" th:field="*{status}">
-                                                                <option value="" disabled selected>-- Chọn trạng thái --</option>
-                                                                <option value="true">True</option>
-                                                                <option value="false">False</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="startDate" class="form-label">Ngày bắt đầu</label>
-                                                            <input type="date" class="form-control" id="startDate" th:field="*{startDate}">
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="completionDate" class="form-label">Ngày hoàn thành</label>
-                                                            <input type="date" class="form-control" id="completionDate" th:field="*{completionDate}">
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Mô tả: full width -->
-                                                    <div class="mb-3">
-                                                        <label for="description" class="form-label">Mô tả</label>
-                                                        <textarea class="form-control" id="description" th:field="*{description}"></textarea>
-                                                    </div>
-
-                                                    <!-- Buttons -->
-                                                    <div class="text-end">
-                                                        <button type="submit" class="btn btn-success">Thêm mới</button>
-                                                        <a th:href="@{/project/apartments}" class="btn btn-secondary">Hủy</a>
-                                                    </div>
-                                                </form>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <a th:href="@{#}" class="btn btn-success btn-sm me-1">
-                                    <i class="bi bi-file-earmark-arrow-up"></i> <span>Import</span>
-                                </a>
-                                <div class="dropdown">
-                                    <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-file-earmark-arrow-down"></i> <span>Xuất file</span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="exportDropdown">
-                                        <li><a class="dropdown-item" th:href="@{/project/apartments/export/excel}">Xuất Excel</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/project/apartments/export/pdf}">Xuất PDF</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <h5 class="card-title mb-0">Thùng rác</h5>
                             <!-- Các nút bên phải -->
                         </div>
                         <!-- Table with stripped rows -->
                         <table class="table datatable">
                             <thead>
                             <tr>
-                                <th><b>T</b>ên dự án</th>
-                                <th>Nhà phát triển</th>
-                                <th>Địa chỉ</th>
-                                <th>Diện tích</th>
+                                <th>Id dự án</th>
+                                <th>Tên dự án</th>
+                                <th>Loại dự án</th>
+                                <th>Số ngày còn lại</th>
                                 <th>Tiện ích</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="apartment : ${apartments}">
-                                <td th:text="${apartment.projectName}"></td>
-                                <td th:text="${apartment.developer}"></td>
+                            <tr th:each="trash : ${trashList}">
+                                <td th:text="${trash.project.projectId}">ID</td>
+                                <td th:text="${trash.project.projectName}">Tên</td>
+                                <td th:text="${trash.project.projectType.typeName}">ID</td>
                                 <td>
-                                    <div class="d-block">
-                                    <span th:text="${apartment.location}"></span>
-                                        <div>
-                                            <span th:text="${apartment.state}"></span>
-                                            <span th:text="${apartment.city}"></span>
-                                        </div>
-                                    </div>
+                                      <span class="badge"
+                                            th:classappend="
+                                              ${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), trash.deletedAt.plusDays(60)).toDays()} &gt;= 40 ? 'bg-success' :
+                                              (${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), trash.deletedAt.plusDays(60)).toDays()} &gt;= 20 ? 'bg-warning text-dark' : 'bg-danger')">
+
+                                            <span th:text="
+                                              ${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), trash.deletedAt.plusDays(60)).toDaysPart()} + ' ngày, ' +
+                                              ${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), trash.deletedAt.plusDays(60)).toHoursPart()} + ' giờ, ' +
+                                              ${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), trash.deletedAt.plusDays(60)).toMinutesPart()} + ' phút'">
+                                            </span>
+                                      </span>
                                 </td>
-                                <td th:text="${apartment.totalArea}"></td>
+
+
                                 <td>
-                                    <a th:href="@{/project/apartments/view/{id}(id=${apartment.id})}" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a>
-                                    <a th:href="@{/project/apartments/edit/{id}(id=${apartment.id})}" class="btn btn-secondary btn-sm"><i class="bi bi-pen"></i></a>
-                                    <a class="btn btn-danger btn-sm"><i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-${apartment.id}"></i></a>
-                                    <div class="modal fade" id="confirmDeleteModal-${apartment.id}" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                                    <!-- Nút khôi phục (hiện modal) -->
+                                    <a class="btn btn-success btn-sm">
+                                        <i class="bi bi-arrow-counterclockwise"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#confirmRestoreModal-${trash.id}">
+                                        </i>
+                                    </a>
+
+                                    <!-- Modal xác nhận khôi phục -->
+                                    <div class="modal fade" id="confirmRestoreModal-${trash.id}" tabindex="-1"
+                                         aria-labelledby="confirmRestoreLabel" aria-hidden="true">
                                         <div class="modal-dialog">
-                                            <form th:action="@{/project/apartments/delete/} + ${apartment.id}" method="post">
-                                                <input type="hidden" name="_method" value="delete"/>
+                                            <form th:action="@{'/project/restore/' + ${trash.id}}" method="post">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="confirmDeleteLabel">Xác nhận xóa</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                        <h5 class="modal-title" id="confirmRestoreLabel">Xác nhận khôi
+                                                            phục</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Đóng"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Bạn có chắc chắn muốn xóa căn hộ này không?
+                                                        Bạn có chắc chắn muốn <strong>khôi phục dự án</strong> <span
+                                                            th:text="${trash.project.projectName}">?</span>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Hủy
+                                                        </button>
+                                                        <button type="submit" class="btn btn-success">Khôi phục</button>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-                                    <a th:href="@{/project/apartments/view/{id}(id=${apartment.id})}" class="btn btn-info btn-sm"><i class="bi bi-copy"></i></a>
+
                                 </td>
                             </tr>
                             </tbody>
+
                         </table>
                         <!-- End Table with stripped rows -->
                     </div>
@@ -678,7 +588,8 @@
 
 </main><!-- End #main -->
 
-<a th:href="@{#}" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a th:href="@{#}" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
 <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>

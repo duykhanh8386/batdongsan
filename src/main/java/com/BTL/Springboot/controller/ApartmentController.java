@@ -30,7 +30,6 @@ public class ApartmentController {
     @Autowired
     private PropertyTypeServiceImpl propertyTyperService;
 
-
     @GetMapping("/apartments")
     public String navigate(Model model){
         model.addAttribute("project", new Project());

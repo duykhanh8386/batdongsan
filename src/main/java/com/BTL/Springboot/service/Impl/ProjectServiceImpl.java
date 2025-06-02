@@ -2,18 +2,17 @@ package com.BTL.Springboot.service.Impl;
 
 import com.BTL.Springboot.dto.ProjectDto;
 import com.BTL.Springboot.entity.Project;
-import com.BTL.Springboot.entity.PropertyType;
+import com.BTL.Springboot.entity.ProjectTrashBinEntity;
 import com.BTL.Springboot.mapper.Map;
 import com.BTL.Springboot.repository.ProjectRepository;
-import com.BTL.Springboot.repository.PropertyRepository;
-import com.BTL.Springboot.repository.PropertyTypeRepository;
+import com.BTL.Springboot.repository.ProjectTrashRepository;
 import com.BTL.Springboot.service.ProjectService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +21,9 @@ import java.util.stream.Collectors;
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private ProjectTrashRepository projectTrashRepository;
 
     @Override
     public List<ProjectDto> getProjectByProjectTypeId(int typeId) {
@@ -59,9 +61,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteProject(int id) {
         Project project = projectRepository.findById(id);
-        project.setStatus("Deleted");
+        project.setStatus("false");
         project.setUpdatedAt(LocalDateTime.now());
         projectRepository.save(project);
+        ProjectTrashBinEntity projectTrashBinEntity = new ProjectTrashBinEntity();
+        projectTrashBinEntity.setProject(project);
+        projectTrashBinEntity.setDeletedAt(LocalDateTime.now());
+        projectTrashRepository.save(projectTrashBinEntity);
     }
 
     @Override
@@ -76,6 +82,4 @@ public class ProjectServiceImpl implements ProjectService {
     public List<Project> getAll() {
         return projectRepository.findAll();
     }
-
-
 }

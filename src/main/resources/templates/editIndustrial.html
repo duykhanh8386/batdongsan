@@ -227,6 +227,11 @@
             <i class="bi bi-circle"></i><span>Nhà ở</span>
           </a>
         </li>
+        <li>
+          <a th:href="@{/project/trashs}">
+            <i class="bi bi-circle"></i><span>Thùng rác</span>
+          </a>
+        </li>
       </ul>
     </li>
     <li class="nav-item">
@@ -432,9 +437,8 @@
                   <label for="status" class="form-label">Trạng thái</label>
                   <select class="form-select" id="status" th:field="*{status}" required>
                     <option value="" disabled selected>-- Chọn trạng thái --</option>
-                    <option value="Planning">Planning</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Completed">Completed</option>
+                    <option value="true">True</option>
+                    <option value="false">False</option>
                   </select>
                 </div>
               </div>

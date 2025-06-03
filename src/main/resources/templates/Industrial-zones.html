@@ -644,10 +644,20 @@
                                 </td>
                                 <td th:text="${industrial.totalArea}"></td>
                                 <td>
-                                    <a th:href="@{/project/industrial-zones/view/{id}(id=${industrial.id})}" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a>
-                                    <a th:href="@{/project/industrial-zones/edit/{id}(id=${industrial.id})}" class="btn btn-secondary btn-sm"><i class="bi bi-pen"></i></a>
-                                    <a class="btn btn-danger btn-sm"><i class="bi bi-trash" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-${industrial.id}"></i></a>
-                                    <div class="modal fade" id="confirmDeleteModal-${industrial.id}" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+                                    <a th:href="@{/project/industrial-zones/view/{id}(id=${industrial.id})}" class="btn btn-primary btn-sm me-1">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a th:href="@{/project/industrial-zones/edit/{id}(id=${industrial.id})}" class="btn btn-secondary btn-sm me-1">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a class="btn btn-danger btn-sm me-1"
+                                       data-bs-toggle="modal"
+                                       th:attr="data-bs-target='#confirmDeleteModal-' + ${industrial.id}">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+
+                                    <!-- Modal xác nhận xóa -->
+                                    <div class="modal fade" th:id="'confirmDeleteModal-' + ${industrial.id}" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <form th:action="@{/project/industrial-zones/delete/} + ${industrial.id}" method="post">
                                                 <input type="hidden" name="_method" value="delete"/>
@@ -657,7 +667,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Bạn có chắc chắn muốn xóa căn hộ này không?
+                                                        Bạn có chắc chắn muốn xóa khu công nghiệp này không?
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>

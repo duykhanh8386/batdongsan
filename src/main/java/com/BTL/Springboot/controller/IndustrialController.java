@@ -1,6 +1,5 @@
 package com.BTL.Springboot.controller;
 
-import com.BTL.Springboot.dto.ProjectDto;
 import com.BTL.Springboot.entity.Project;
 import com.BTL.Springboot.entity.Property;
 import com.BTL.Springboot.entity.PropertyType;
@@ -22,7 +21,7 @@ public class IndustrialController {
     private ProjectServiceImpl projectService;
 
     @Autowired
-    private PropertyServiceImpl propertyServicel;
+    private PropertyServiceImpl propertyService;
 
     @Autowired
     private PropertyTypeServiceImpl propertyTyperService;
@@ -40,7 +39,7 @@ public class IndustrialController {
     public String viewProject(@PathVariable("id") Integer id, Model model) {
         // Tìm project theo ID
         Project project = projectService.getProjectById(id);
-        List<Property> properties = propertyServicel.findByProjectId(id);
+        List<Property> properties = propertyService.getPropertyByProjectId(id);
         model.addAttribute("project", project);
         model.addAttribute("properties", properties);
         return "viewIndustrial";

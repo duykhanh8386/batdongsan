@@ -2,14 +2,13 @@ package com.BTL.Springboot.service.Impl;
 
 import com.BTL.Springboot.dto.ProjectDto;
 import com.BTL.Springboot.entity.Project;
-import com.BTL.Springboot.entity.ProjectTrashBinEntity;
+import com.BTL.Springboot.entity.ProjectTrashBin;
+import com.BTL.Springboot.entity.Property;
 import com.BTL.Springboot.mapper.Map;
-import com.BTL.Springboot.repository.ProjectRepository;
-import com.BTL.Springboot.repository.ProjectTrashRepository;
+import com.BTL.Springboot.repository.*;
 import com.BTL.Springboot.service.ProjectService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +23,21 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private ProjectTrashRepository projectTrashRepository;
+
+    @Autowired
+    private PropertyRepository propertyRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
+    private PropertyImageRepository propertyImageRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     @Override
     public List<ProjectDto> getProjectByProjectTypeId(int typeId) {
@@ -64,7 +78,14 @@ public class ProjectServiceImpl implements ProjectService {
         project.setStatus("false");
         project.setUpdatedAt(LocalDateTime.now());
         projectRepository.save(project);
-        ProjectTrashBinEntity projectTrashBinEntity = new ProjectTrashBinEntity();
+
+        propertyRepository.softDeletePropertiesByProject(id);
+        propertyImageRepository.softDeleteImagesByProject(id);
+        appointmentRepository.cancelAppointmentsByProject(id);
+        transactionRepository.cancelTransactionsByProject(id);
+        paymentRepository.cancelPaymentsByProject(id);
+
+        ProjectTrashBin projectTrashBinEntity = new ProjectTrashBin();
         projectTrashBinEntity.setProject(project);
         projectTrashBinEntity.setDeletedAt(LocalDateTime.now());
         projectTrashRepository.save(projectTrashBinEntity);

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PropertyFeature {
+
     @Id
     @ManyToOne
     @JoinColumn(name = "property_id", nullable = false)
@@ -22,4 +23,7 @@ public class PropertyFeature {
 
     @Column(name = "feature_value", length = 100)
     private String featureValue;
+
+    @Column(name = "is_active")
+    private String isActive;
 }

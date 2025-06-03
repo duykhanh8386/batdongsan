@@ -17,4 +17,9 @@ public class PropertyServiceImpl implements PropertyService {
     public List<Property> findByProjectId(int id) {
         return propertyRepository.findByPropertyId(id);
     }
+
+    @Override
+    public List<Property> getPropertyByProjectId(int id) {
+        return propertyRepository.findPropertiesByProjectId(id);
+    }
 }

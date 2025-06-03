@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PropertyService {
     List<Property> findByProjectId(int id);
+    List<Property> getPropertyByProjectId(int id);
 }

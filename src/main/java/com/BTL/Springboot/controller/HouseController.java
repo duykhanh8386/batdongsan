@@ -22,7 +22,7 @@ public class HouseController {
     private ProjectServiceImpl projectService;
 
     @Autowired
-    private PropertyServiceImpl propertyServicel;
+    private PropertyServiceImpl propertyService;
 
     @Autowired
     private PropertyTypeServiceImpl propertyTyperService;
@@ -40,7 +40,7 @@ public class HouseController {
     public String viewProject(@PathVariable("id") Integer id, Model model) {
         // Tìm project theo ID
         Project project = projectService.getProjectById(id);
-        List<Property> properties = propertyServicel.findByProjectId(id);
+        List<Property> properties = propertyService.getPropertyByProjectId(id);
         model.addAttribute("project", project);
         model.addAttribute("properties", properties);
         return "viewHouse";

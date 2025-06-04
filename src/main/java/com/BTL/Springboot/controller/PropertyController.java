@@ -1,18 +1,16 @@
 package com.BTL.Springboot.controller;
 
-import com.BTL.Springboot.dto.response.customer.CustomerDto;
-import com.BTL.Springboot.dto.response.employee.EmployeeDto;
 import com.BTL.Springboot.dto.response.project.ProjectDto;
 import com.BTL.Springboot.dto.response.property.PropertyDto;
 import com.BTL.Springboot.dto.response.property_type.PropertyTypeDto;
 import com.BTL.Springboot.dto.request.property.PropertyRequest;
 import com.BTL.Springboot.dto.response.user.UserAccountDto;
-import com.BTL.Springboot.entity.Property;
-import com.BTL.Springboot.entity.PropertyImage;
-import com.BTL.Springboot.entity.PropertyType;
+import com.BTL.Springboot.entity.*;
 import com.BTL.Springboot.mapper.PropertyMapper;
 import com.BTL.Springboot.service.*;
-import jakarta.servlet.http.HttpSession;
+import com.BTL.Springboot.util.PropertyExcelExportUtil;
+import com.BTL.Springboot.util.PropertyPDFExportUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,10 +65,10 @@ public class PropertyController {
             System.out.println("Role: " + user.getRole());
             System.out.println("Employee: " + user.getEmployee());
             System.out.println("Customer: " + user.getCustomer());
-            mav.addObject("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+            mav.addObject("user", user != null ? user : new Object());
         } catch (Exception e) {
             System.out.println("Error fetching user info: " + e.getMessage());
-            mav.addObject("user", new Object()); // Truyền object rỗng nếu có lỗi
+            mav.addObject("user", new Object());
         }
         List<PropertyDto> properties = propertyService.findAllByListingTypeAndStatus("Bán", "true");
         mav.addObject("properties", properties);
@@ -89,10 +89,10 @@ public class PropertyController {
             System.out.println("Role: " + user.getRole());
             System.out.println("Employee: " + user.getEmployee());
             System.out.println("Customer: " + user.getCustomer());
-            mav.addObject("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+            mav.addObject("user", user != null ? user : new Object());
         } catch (Exception e) {
             System.out.println("Error fetching user info: " + e.getMessage());
-            mav.addObject("user", new Object()); // Truyền object rỗng nếu có lỗi
+            mav.addObject("user", new Object());
         }
         List<PropertyDto> properties = propertyService.findAllByListingTypeAndStatus("Cho thuê", "true");
         mav.addObject("properties", properties);
@@ -115,10 +115,10 @@ public class PropertyController {
             System.out.println("Role: " + user.getRole());
             System.out.println("Employee: " + user.getEmployee());
             System.out.println("Customer: " + user.getCustomer());
-            mav.addObject("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+            mav.addObject("user", user != null ? user : new Object());
         } catch (Exception e) {
             System.out.println("Error fetching user info: " + e.getMessage());
-            mav.addObject("user", new Object()); // Truyền object rỗng nếu có lỗi
+            mav.addObject("user", new Object());
         }
         PropertyDto property = propertyService.getPropertyById(id);
         Property propertyImage = mapper.toEntity(property);
@@ -151,19 +151,17 @@ public class PropertyController {
             System.out.println("Role: " + user.getRole());
             System.out.println("Employee: " + user.getEmployee());
             System.out.println("Customer: " + user.getCustomer());
-            mav.addObject("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+            mav.addObject("user", user != null ? user : new Object());
 
             PropertyDto dto = propertyService.getPropertyById(id);
             Property property = mapper.toEntity(dto);
 
-            // Khôi phục ảnh ẩn
             List<String> restoredUrls = propertyImageService.restoreImagesFromHidden(property);
             if (!restoredUrls.isEmpty()) {
                 log.info("Restored {} hidden images for property ID {}", restoredUrls.size(), id);
             }
 
             List<PropertyImage> images = propertyImageService.getImagesByProperty(property);
-            // Lấy tempImageUrls từ service
             List<String> tempImageUrls = propertyImageService.getTempImagesByProperty(property);
             log.info("Retrieved tempImageUrls for property ID {}: {}", id, tempImageUrls);
 
@@ -178,7 +176,6 @@ public class PropertyController {
             mav.addObject("listingTypes", Arrays.asList("Bán", "Cho thuê"));
             mav.addObject("tempImageUrls", tempImageUrls);
 
-            // Lấy hiddenImageUrls và imagesToDelete từ flash attributes
             List<String> hiddenImageUrls = getFlashAttributeAsList(redirectAttributes, "hiddenImageUrls");
             mav.addObject("hiddenImageUrls", hiddenImageUrls);
 
@@ -194,8 +191,7 @@ public class PropertyController {
             mav.addObject("previousPage", finalPreviousPage);
         } catch (Exception e) {
             System.out.println("Error fetching user info: " + e.getMessage());
-            mav.addObject("user", new Object()); // Truyền object rỗng nếu có lỗi
-
+            mav.addObject("user", new Object());
             log.error("Error loading edit form for property ID {}: {}", id, e.getMessage(), e);
             mav.addObject("errorMessage", "Lỗi khi tải form chỉnh sửa: " + e.getMessage());
             mav.setViewName("redirect:/properties");
@@ -247,27 +243,6 @@ public class PropertyController {
         }
 
         try {
-            // Kiểm tra propertyCode
-            String propertyCode = request.getPropertyCode() != null ? request.getPropertyCode().trim() : null;
-            if (propertyCode == null || propertyCode.isEmpty()) {
-                throw new IllegalArgumentException("Mã bất động sản không được để trống.");
-            }
-            if (propertyService.existsByPropertyCode(propertyCode)) {
-                throw new IllegalArgumentException("Mã bất động sản đã tồn tại: " + propertyCode);
-            }
-            if (request.getListingType() == null || (!request.getListingType().equals("Bán") && !request.getListingType().equals("Cho thuê"))) {
-                throw new IllegalArgumentException("Loại giao dịch phải là 'Bán' hoặc 'Cho thuê'.");
-            }
-            if (request.getPropertyType() == null || request.getPropertyType().getTypeId() == null) {
-                throw new IllegalArgumentException("Loại bất động sản không được để trống.");
-            }
-            if (request.getListingAgent() == null || request.getListingAgent().getEmployeeId() == null) {
-                throw new IllegalArgumentException("Nhân viên phụ trách không được để trống.");
-            }
-            if (request.getOwner() == null || request.getOwner().getCustomerId() == null) {
-                throw new IllegalArgumentException("Chủ sở hữu không được để trống.");
-            }
-
             PropertyDto savedProperty = propertyService.createProperty(request);
             redirectAttributes.addFlashAttribute("successMessage", "Thêm bất động sản thành công!");
             String redirectPage = request.getListingType().equals("Cho thuê") ? "/properties/for-rent" : "/properties/for-sale";
@@ -312,50 +287,6 @@ public class PropertyController {
         }
 
         try {
-            // Kiểm tra propertyCode
-            String propertyCode = request.getPropertyCode() != null ? request.getPropertyCode().trim() : null;
-            if (propertyCode == null || propertyCode.isEmpty()) {
-                throw new IllegalArgumentException("Mã bất động sản không được để trống.");
-            }
-            if (propertyId != null) {
-                // Cập nhật bất động sản
-                PropertyDto existingProperty = propertyService.getPropertyById(propertyId);
-                if (existingProperty == null) {
-                    throw new IllegalArgumentException("Không tìm thấy bất động sản với ID: " + propertyId);
-                }
-                String existingPropertyCode = existingProperty.getPropertyCode() != null ? existingProperty.getPropertyCode().trim() : "";
-                // Kiểm tra trùng chỉ khi propertyCode thay đổi
-                if (!propertyCode.equals(existingPropertyCode) &&
-                        propertyService.existsByPropertyCode(propertyCode)) {
-                    throw new IllegalArgumentException("Mã bất động sản đã tồn tại: " + propertyCode);
-                }
-            } else {
-                // Tạo mới bất động sản
-                if (propertyService.existsByPropertyCode(propertyCode)) {
-                    throw new IllegalArgumentException("Mã bất động sản đã tồn tại: " + propertyCode);
-                }
-            }
-            if (request.getListingType() == null || (!request.getListingType().equals("Bán") && !request.getListingType().equals("Cho thuê"))) {
-                throw new IllegalArgumentException("Loại giao dịch phải là 'Bán' hoặc 'Cho thuê'.");
-            }
-            if (request.getPropertyType() == null || request.getPropertyType().getTypeId() == null) {
-                throw new IllegalArgumentException("Loại bất động sản không được để trống.");
-            }
-            if (request.getListingAgent() == null || request.getListingAgent().getEmployeeId() == null) {
-                throw new IllegalArgumentException("Nhân viên phụ trách không được để trống.");
-            }
-            if (request.getOwner() == null || request.getOwner().getCustomerId() == null) {
-                throw new IllegalArgumentException("Chủ sở hữu không được để trống.");
-            }
-
-            if (propertyId != null) {
-                PropertyDto existingProperty = propertyService.getPropertyById(propertyId);
-                request.setCreatedAt(existingProperty.getCreatedAt());
-            } else {
-                request.setCreatedAt(java.time.LocalDateTime.now());
-            }
-            request.setUpdatedAt(java.time.LocalDateTime.now());
-
             PropertyDto savedProperty = propertyService.saveProperty(request, propertyId);
             redirectAttributes.addFlashAttribute("successMessage", "Lưu thông tin bất động sản thành công!");
             mav.setViewName("redirect:/properties/detail/" + savedProperty.getPropertyId());
@@ -376,13 +307,13 @@ public class PropertyController {
         return mav;
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public ModelAndView deleteById(@PathVariable("id") Integer id,
                                    @RequestHeader(value = "referer", required = false) String referer,
                                    RedirectAttributes redirectAttributes) {
         ModelAndView mav = new ModelAndView();
         try {
-            propertyService.deletePropertyStatus(id, "false");
+            propertyService.deleteProperty(id);
             redirectAttributes.addFlashAttribute("successMessage", "Xóa bất động sản thành công!");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy bất động sản với ID: " + id);
@@ -392,33 +323,22 @@ public class PropertyController {
         return mav;
     }
 
-    @GetMapping("/propertyType")
-    @ResponseBody
-    public List<PropertyTypeDto> getAllPropertyTypes() {
-        return propertyTypeService.getAllPropertyTypes();
+    @GetMapping("/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=properties.xlsx");
+
+        List<PropertyDto> list = propertyService.getAllProperties();
+        PropertyExcelExportUtil exporter = new PropertyExcelExportUtil(list);
+        exporter.export(response);
     }
 
-    @GetMapping("/project")
-    @ResponseBody
-    public List<ProjectDto> getAllProjects() {
-        return projectService.getAllProjects();
-    }
+    @GetMapping("/export/pdf")
+    public void exportToPDF(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=properties.pdf");
 
-
-    @GetMapping("/all")
-    @ResponseBody
-    public List<PropertyDto> getAlls() {
-        return propertyService.getAllProperties();
-    }
-
-    @GetMapping("/sale")
-    @ResponseBody
-    public List<PropertyDto> getAllByListingTypeAndStatus() {
-        return propertyService.findAllByListingTypeAndStatus("Bán", "True");
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getPropertyById(@PathVariable Integer id) {
-        return ResponseEntity.ok(propertyService.getPropertyById(id));
+        List<PropertyDto> list = propertyService.getAllProperties();
+        PropertyPDFExportUtil.export(response, list);
     }
 }

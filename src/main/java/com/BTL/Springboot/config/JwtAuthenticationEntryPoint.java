@@ -16,6 +16,20 @@ import java.util.Map;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
+    /**
+     * Phương thức xử lý các yêu cầu không được xác thực.
+     * - Kiểm tra header "Accept" để xác định yêu cầu là API (chấp nhận JSON) hay HTML.
+     * - Nếu là API, trả về phản hồi JSON với mã lỗi 1006 và thông báo "Unauthenticated".
+     * - Nếu là yêu cầu HTML, chuyển hướng đến trang đăng nhập với tham số redirectUrl
+     *   chứa đường dẫn yêu cầu ban đầu.
+     *
+     * @param request Yêu cầu HTTP từ client
+     * @param response Phản hồi HTTP gửi về client
+     * @param authException Ngoại lệ xác thực, cung cấp thông tin về lỗi xác thực
+     * @throws IOException Nếu có lỗi khi ghi phản hồi
+     * @throws ServletException Nếu có lỗi liên quan đến servlet
+     */
     @Override
     public void commence(
             HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)

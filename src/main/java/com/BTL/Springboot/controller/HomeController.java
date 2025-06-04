@@ -4,9 +4,16 @@ import com.BTL.Springboot.dto.response.user.UserAccountDto;
 import com.BTL.Springboot.entity.UserAccount;
 import com.BTL.Springboot.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 
 @Controller
 public class HomeController {
@@ -31,4 +38,15 @@ public class HomeController {
         modelAndView.setViewName("index");
         return modelAndView;
     }
+
+    @GetMapping("/property.json")
+    public String getJson() {
+        return "property.json";
+    }
+
+    @GetMapping("/property.csv")
+    public String getCsv() {
+        return "property.txt";
+    }
+
 }

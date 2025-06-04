@@ -297,6 +297,11 @@
             <i class="bi bi-circle"></i><span>Cho thuê</span>
           </a>
         </li>
+        <li>
+          <a th:href="@{/deleted-property/all}">
+            <i class="bi bi-circle"></i><span>Đã xóa</span>
+          </a>
+        </li>
       </ul>
     </li><!-- End Components Nav -->
 
@@ -523,9 +528,28 @@
                   <th:block th:each="imageToDelete : ${imagesToDelete}">
                     <input type="hidden" name="imagesToDelete" th:value="${imageToDelete}"/>
                   </th:block>
-                  <button type="submit" class="btn btn-primary" onclick="return confirm('Bạn có chắc chắn muốn cập nhật hình ảnh không?')">
+                  <!-- Nút kích hoạt modal -->
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmDeleteImageModal">
                     <span>Lưu hình ảnh</span>
                   </button>
+                  <!-- Modal xác nhận -->
+                  <div class="modal fade" id="confirmDeleteImageModal" tabindex="-1" aria-labelledby="confirmDeleteImageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="confirmDeleteImageModalLabel">Xác nhận</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Bạn có chắc chắn muốn cập nhật hình ảnh không?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                          <button type="submit" form="saveImagesForm" class="btn btn-primary">Xác nhận</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </form>
               </div>
 
@@ -649,7 +673,7 @@
 
               <div class="col-sm-12">
                 <label for="description" class="form-label">Mô tả</label>
-                <textarea class="form-control" id="description" th:field="*{description}" th:readonly="${!isEditMode}"></textarea>
+                <textarea class="form-control" style="height: 150px;" id="description" th:field="*{description}" th:readonly="${!isEditMode}"></textarea>
                 <div th:errors="*{description}" class="text-danger"></div>
               </div>
 
@@ -778,7 +802,29 @@
               <div class="text-center">
                 <th:block th:if="${isEditMode}">
                   <a th:href="@{${previousPage}}" class="btn btn-secondary">Hủy</a>
-                  <button type="submit" class="btn btn-primary" onclick="return confirm('Bạn có chắc chắn muốn cập nhật thông tin này không?')">Lưu thay đổi</button>
+                  <!-- Nút kích hoạt modal -->
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmSaveModal">
+                    Lưu thay đổi
+                  </button>
+
+                  <!-- Modal xác nhận -->
+                  <div class="modal fade" id="confirmSaveModal" tabindex="-1" aria-labelledby="confirmSaveModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="confirmSaveModalLabel">Xác nhận</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Bạn có chắc chắn muốn cập nhật thông tin bất động sản này không?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                          <button type="submit" form="propertyForm" class="btn btn-primary">Xác nhận</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </th:block>
                 <th:block th:unless="${isEditMode}">
                   <a th:href="@{${previousPage}}" class="btn btn-secondary">Quay lại</a>

@@ -25,12 +25,13 @@ public interface PropertyService {
     // Hàm lưu thông tin properties
     PropertyDto saveProperty(PropertyRequest request, Integer propertyId);
 
-    // Hàm xóa properties
-    void deletePropertyStatus(Integer id, String status);
-
     // Hàm tạo mới properties
     PropertyDto createProperty(PropertyRequest request);
 
+    PropertyDto updateProperty(PropertyRequest request);
+
     // Hàm kiểm tra propertyCode
     boolean existsByPropertyCode(String propertyCode);
+
+    void deleteProperty(Integer id);
 }

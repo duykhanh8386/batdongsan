@@ -18,4 +18,16 @@ public class EmployeeMapper {
         dto.setLastName(employee.getLastName());
         return dto;
     }
+
+    public Employee toEntity(EmployeeDto dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        Employee employee = new Employee();
+        employee.setEmployeeId(dto.getEmployeeId());
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        return employee;
+    }
 }

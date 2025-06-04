@@ -55,7 +55,7 @@ public class AuthenticationController {
             tokenCookie.setHttpOnly(true);
             tokenCookie.setSecure(true);
             tokenCookie.setPath("/");
-            tokenCookie.setMaxAge(3 * 60); // 3 phút
+            tokenCookie.setMaxAge(30 * 60); // 3 phút
             tokenCookie.setAttribute("SameSite", "Lax");
 
             // Thêm cookie vào response

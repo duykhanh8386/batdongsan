@@ -22,25 +22,55 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    /**
+     * Danh sách các endpoint GET công khai, không yêu cầu xác thực.
+     * Bao gồm các tài nguyên tĩnh (CSS, JS, hình ảnh), favicon, trang đăng nhập, và file dữ liệu mẫu.
+     */
     private final String[] GET_PUBLIC_ENDPOINTS = {
             "/auth/login",           // Trang đăng nhập
             "/assets/**",       // Tài nguyên tĩnh (css, js, vendor)
             "/css/**", "/js/**", "/images/**", // Thư mục tĩnh khác
             "/favicon.ico",     // Favicon
-            "/pages-login"      // Template trang đăng nhập
+            "/pages-login",      // Template trang đăng nhập
+            "/property.json",
+            "/property.csv"
     };
+
+    /**
+     * Danh sách các endpoint POST công khai, không yêu cầu xác thực.
+     * Bao gồm API đăng nhập, đăng xuất, và kiểm tra token JWT.
+     */
     private final String[] POST_PUBLIC_ENDPOINTS = {
             "/auth/login",      // API đăng nhập
             "/auth/logout",     // API đăng xuất
             "/auth/introspect"  // API kiểm tra token
     };
 
+    /**
+     * Tiêm CustomJwtDecoder để giải mã token JWT tùy chỉnh.
+     */
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
+    /**
+     * Tiêm JwtCookieFilter để xử lý token JWT từ cookie.
+     */
     @Autowired
     private JwtCookieFilter jwtCookieFilter;
 
+    /**
+     * Cấu hình chuỗi bộ lọc bảo mật (SecurityFilterChain) cho ứng dụng.
+     * - Cho phép truy cập công khai vào các endpoint GET và POST được chỉ định.
+     * - Yêu cầu xác thực cho tất cả các yêu cầu khác.
+     * - Sử dụng OAuth2 Resource Server với JWT để xác thực.
+     * - Tắt CSRF để phù hợp với API sử dụng token.
+     * - Thêm bộ lọc JwtCookieFilter trước BearerTokenAuthenticationFilter để xử lý token từ cookie.
+     *
+     * @param httpSecurity Đối tượng HttpSecurity để cấu hình bảo mật
+     * @return SecurityFilterChain Chuỗi bộ lọc bảo mật đã được cấu hình
+     * @throws Exception Nếu có lỗi trong quá trình cấu hình
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
@@ -61,6 +91,13 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
+    /**
+     * Cấu hình bộ lọc CORS để cho phép truy cập từ các nguồn khác nhau.
+     * - Cho phép tất cả các nguồn (origin), phương thức HTTP, và tiêu đề (header).
+     * - Áp dụng cấu hình CORS cho tất cả các đường dẫn (/**).
+     *
+     * @return CorsFilter Bộ lọc CORS đã được cấu hình
+     */
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -74,6 +111,13 @@ public class SecurityConfig {
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
 
+    /**
+     * Cấu hình bộ chuyển đổi JWT để ánh xạ các claim trong token thành quyền (authorities).
+     * - Sử dụng JwtGrantedAuthoritiesConverter để trích xuất quyền từ claim.
+     * - Loại bỏ tiền tố mặc định của quyền để phù hợp với cấu hình ứng dụng.
+     *
+     * @return JwtAuthenticationConverter Bộ chuyển đổi JWT
+     */
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -85,6 +129,12 @@ public class SecurityConfig {
         return jwtAuthenticationConverter;
     }
 
+    /**
+     * Cấu hình mã hóa mật khẩu sử dụng BCrypt với độ mạnh (strength) là 10.
+     * - BCrypt là thuật toán mã hóa mật khẩu an toàn, được sử dụng để mã hóa và kiểm tra mật khẩu.
+     *
+     * @return PasswordEncoder Đối tượng mã hóa mật khẩu
+     */
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);

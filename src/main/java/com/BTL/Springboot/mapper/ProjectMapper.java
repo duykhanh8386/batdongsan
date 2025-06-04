@@ -17,4 +17,15 @@ public class ProjectMapper {
         dto.setProjectName(project.getProjectName());
         return dto;
     }
+
+    public Project toEntity(ProjectDto dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        Project project = new Project();
+        project.setProjectId(dto.getProjectId());
+        project.setProjectName(dto.getProjectName());
+        return project;
+    }
 }

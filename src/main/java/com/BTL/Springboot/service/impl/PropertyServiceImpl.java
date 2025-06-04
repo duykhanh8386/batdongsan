@@ -2,106 +2,67 @@ package com.BTL.Springboot.service.impl;
 
 import com.BTL.Springboot.dto.response.property.PropertyDto;
 import com.BTL.Springboot.dto.request.property.PropertyRequest;
+import com.BTL.Springboot.entity.PropertyTrashBin;
 import com.BTL.Springboot.entity.Property;
+import com.BTL.Springboot.mapper.PropertyTrashMapper;
 import com.BTL.Springboot.mapper.PropertyMapper;
-import com.BTL.Springboot.repository.PropertyRepository;
+import com.BTL.Springboot.repository.*;
 import com.BTL.Springboot.service.PropertyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class PropertyServiceImpl implements PropertyService {
+
     @Autowired
     private PropertyRepository propertyRepository;
+
     @Autowired
-    private PropertyMapper mapper;
+    private PropertyTrashRepository propertyTrashRepository;
 
-    /**
-     * Get all properties
-     */
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
-    @Override
-    public List<PropertyDto> getAllProperties() {
-        List<Property> properties = propertyRepository.findAll();
-        return properties.stream().map(mapper::toDto).collect(Collectors.toList());
-    }
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
-    /**
-     * Get property by ID
-     */
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
-    @Override
-    public PropertyDto getPropertyById(Integer id) {
-        Property property = propertyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Property not found with id: " + id));
-        return mapper.toDto(property);
-    }
+    @Autowired
+    private TransactionRepository transactionRepository;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
-    @Override
-    public PropertyDto getPropertyByCode(String propertyCode) {
-        Property property = propertyRepository.findByPropertyCode(propertyCode)
-                .orElseThrow(() -> new RuntimeException("Property not found"));
-        return mapper.toDto(property);
-    }
+    @Autowired
+    private PropertyImageRepository propertyImageRepository;
 
-    /**
-     * Find properties by listing type and status = true
-     */
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
-    @Override
-    public List<PropertyDto> findAllByListingTypeAndStatusTrue(String listingType) {
-        List<Property> properties = propertyRepository.findAllByListingTypeAndStatusTrue(listingType);
-        return properties.stream().map(mapper::toDto).collect(Collectors.toList());
-    }
+    @Autowired
+    private PaymentRepository paymentRepository;
 
-    /**
-     * Find properties by listing type and status
-     */
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
-    @Override
-    public List<PropertyDto> findAllByListingTypeAndStatus(String listingType, String status) {
-        List<Property> properties = propertyRepository.findAllByListingTypeAndStatus(listingType, status);
-        return properties.stream().map(mapper::toDto).collect(Collectors.toList());
-    }
+    @Autowired
+    private PropertyMapper propertyMapper;
 
-    /**
-     * Save a property (create or update)
-     */
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
-    @Override
-    public PropertyDto saveProperty(PropertyRequest request, Integer propertyId) {
-        Property property = mapper.toEntity(request);
+    @Autowired
+    private PropertyTrashMapper propertyTrashMapper;
+
+    public void validatePropertyRequest(PropertyRequest request, Integer propertyId) {
         // Kiểm tra propertyCode
-        String propertyCode = property.getPropertyCode() != null ? property.getPropertyCode().trim() : null;
+        String propertyCode = request.getPropertyCode() != null ? request.getPropertyCode().trim() : null;
         if (propertyCode == null || propertyCode.isEmpty()) {
             log.error("Property code is null or empty");
             throw new IllegalArgumentException("Mã bất động sản không được để trống.");
         }
 
+        // Kiểm tra trùng propertyCode
         if (propertyId != null) {
             // Cập nhật bất động sản
-            Optional<Property> existingPropertyOpt = propertyRepository.findById(propertyId);
-            if (!existingPropertyOpt.isPresent()) {
-                log.error("Property not found with ID: {}", propertyId);
-                throw new IllegalArgumentException("Không tìm thấy bất động sản với ID: " + propertyId);
-            }
-            Property existingProperty = existingPropertyOpt.get();
+            Property existingProperty = propertyRepository.findById(propertyId)
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bất động sản với ID: " + propertyId));
             String existingPropertyCode = existingProperty.getPropertyCode() != null ? existingProperty.getPropertyCode().trim() : "";
-            // Kiểm tra trùng chỉ khi propertyCode thay đổi
             if (!propertyCode.equals(existingPropertyCode) && existsByPropertyCode(propertyCode)) {
                 log.error("Property code {} already exists", propertyCode);
                 throw new IllegalArgumentException("Mã bất động sản đã tồn tại: " + propertyCode);
             }
-            // Gán propertyId cho entity khi cập nhật
-            property.setPropertyId(propertyId);
         } else {
             // Tạo mới bất động sản
             if (existsByPropertyCode(propertyCode)) {
@@ -110,41 +71,121 @@ public class PropertyServiceImpl implements PropertyService {
             }
         }
 
-        // Lưu bất động sản
-        Property savedProperty = propertyRepository.save(property);
-        log.info("Saved property with ID: {}", savedProperty.getPropertyId());
-        return mapper.toDto(savedProperty);
+        // Kiểm tra listingType
+        if (request.getListingType() == null || (!request.getListingType().equals("Bán") && !request.getListingType().equals("Cho thuê"))) {
+            log.error("Invalid listing type: {}", request.getListingType());
+            throw new IllegalArgumentException("Loại giao dịch phải là 'Bán' hoặc 'Cho thuê'.");
+        }
+
+        // Kiểm tra propertyType
+        if (request.getPropertyType() == null || request.getPropertyType().getTypeId() == null) {
+            log.error("Property type is null or invalid");
+            throw new IllegalArgumentException("Loại bất động sản không được để trống.");
+        }
+
+        // Kiểm tra listingAgent
+        if (request.getListingAgent() == null || request.getListingAgent().getEmployeeId() == null) {
+            log.error("Listing agent is null or invalid");
+            throw new IllegalArgumentException("Nhân viên phụ trách không được để trống.");
+        }
+
+        // Kiểm tra owner
+        if (request.getOwner() == null || request.getOwner().getCustomerId() == null) {
+            log.error("Owner is null or invalid");
+            throw new IllegalArgumentException("Chủ sở hữu không được để trống.");
+        }
     }
 
-    /**
-     * Update property status (soft delete)
-     */
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
-    public void deletePropertyStatus(Integer id, String status) {
-        Property property = propertyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Property not found with id: " + id));
-        property.setStatus(status);
-        propertyRepository.save(property);
+    public PropertyDto saveProperty(PropertyRequest request, Integer propertyId) {
+        // Kiểm tra điều kiện
+        validatePropertyRequest(request, propertyId);
+
+        Property property = propertyMapper.toEntity(request);
+        if (propertyId != null) {
+            // Cập nhật bất động sản
+            Property existingProperty = propertyRepository.findById(propertyId)
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bất động sản với ID: " + propertyId));
+            property.setPropertyId(propertyId);
+            property.setCreatedAt(existingProperty.getCreatedAt()); // Giữ nguyên createdAt
+            property.setUpdatedAt(LocalDateTime.now()); // Cập nhật updatedAt
+        } else {
+            // Tạo mới bất động sản
+            property.setCreatedAt(LocalDateTime.now()); // Đặt createdAt khi tạo mới
+            property.setUpdatedAt(LocalDateTime.now()); // Cập nhật updatedAt
+        }
+
+        Property savedProperty = propertyRepository.save(property);
+        log.info("Saved property with ID: {}", savedProperty.getPropertyId());
+        return propertyMapper.toDto(savedProperty);
     }
 
-    /**
-     * Create a new property
-     */
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public PropertyDto createProperty(PropertyRequest request) {
-        Property property = mapper.toEntity(request);
+        // Kiểm tra điều kiện
+        validatePropertyRequest(request, null);
+
+        Property property = propertyMapper.toEntity(request);
         if (property.getStatus() == null) {
             property.setStatus("true");
         }
         if (property.getIsFurnished() == null) {
             property.setIsFurnished(false);
         }
-        property.setCreatedAt(java.time.LocalDateTime.now());
-        property.setUpdatedAt(java.time.LocalDateTime.now());
+        property.setCreatedAt(LocalDateTime.now());
+        property.setUpdatedAt(LocalDateTime.now());
         Property savedProperty = propertyRepository.save(property);
-        return mapper.toDto(savedProperty);
+        return propertyMapper.toDto(savedProperty);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
+    @Override
+    public PropertyDto updateProperty(PropertyRequest request) {
+        String propertyCode = request.getPropertyCode() != null ? request.getPropertyCode().trim() : null;
+        Property existingProperty = propertyRepository.findByPropertyCode(propertyCode)
+                .orElseThrow(() -> new IllegalArgumentException("Bất động sản với mã " + propertyCode + " không tồn tại."));
+        validatePropertyRequest(request, existingProperty.getPropertyId());
+        return saveProperty(request, existingProperty.getPropertyId());
+    }
+
+    // Các phương thức khác giữ nguyên
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
+    @Override
+    public List<PropertyDto> getAllProperties() {
+        List<Property> properties = propertyRepository.findAll();
+        return properties.stream().map(propertyMapper::toDto).collect(Collectors.toList());
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
+    @Override
+    public PropertyDto getPropertyById(Integer id) {
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Property not found with id: " + id));
+        return propertyMapper.toDto(property);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
+    @Override
+    public PropertyDto getPropertyByCode(String propertyCode) {
+        Property property = propertyRepository.findByPropertyCode(propertyCode)
+                .orElseThrow(() -> new RuntimeException("Property not found"));
+        return propertyMapper.toDto(property);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
+    @Override
+    public List<PropertyDto> findAllByListingTypeAndStatusTrue(String listingType) {
+        List<Property> properties = propertyRepository.findAllByListingTypeAndStatusTrue(listingType);
+        return properties.stream().map(propertyMapper::toDto).collect(Collectors.toList());
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
+    @Override
+    public List<PropertyDto> findAllByListingTypeAndStatus(String listingType, String status) {
+        List<Property> properties = propertyRepository.findAllByListingTypeAndStatus(listingType, status);
+        return properties.stream().map(propertyMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -152,5 +193,34 @@ public class PropertyServiceImpl implements PropertyService {
         boolean exists = propertyRepository.existsByPropertyCode(propertyCode);
         log.info("Checked propertyCode {}: exists={}", propertyCode, exists);
         return exists;
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
+    @Override
+    public void deleteProperty(Integer id) {
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy bất động sản với ID: " + id));
+
+        if ("false".equals(property.getStatus())) {
+            log.warn("Bất động sản với ID {} đã bị xóa trước đó", id);
+            return;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        property.setStatus("false");
+        property.setUpdatedAt(now);
+
+        propertyImageRepository.softDeleteImagesByProject(id);
+        appointmentRepository.cancelAppointmentsByProject(id);
+        transactionRepository.cancelTransactionsByProject(id);
+        paymentRepository.cancelPaymentsByProject(id);
+
+        PropertyTrashBin propertyTrashBin = new PropertyTrashBin();
+        propertyTrashBin.setProperty(property);
+        propertyTrashBin.setDeletedAt(now);
+
+        propertyRepository.save(property);
+        propertyTrashRepository.save(propertyTrashBin);
+        log.info("Đã xóa mềm bất động sản với ID: {} và lưu vào bảng deleted_properties", id);
     }
 }

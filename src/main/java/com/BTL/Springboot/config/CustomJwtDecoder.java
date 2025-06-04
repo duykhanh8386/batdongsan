@@ -18,6 +18,7 @@ import com.nimbusds.jose.JOSEException;
 
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
+
     @Value("${jwt.signerKey}")
     private String signerKey;
 
@@ -26,6 +27,17 @@ public class CustomJwtDecoder implements JwtDecoder {
 
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
+    /**
+     * Phương thức giải mã token JWT.
+     * - Kiểm tra tính hợp lệ của token bằng cách gọi phương thức introspect của AuthenticationService.
+     * - Nếu token không hợp lệ, ném ra JwtException.
+     * - Khởi tạo NimbusJwtDecoder với khóa bí mật và thuật toán HS512 nếu chưa được khởi tạo.
+     * - Giải mã token và trả về đối tượng Jwt.
+     *
+     * @param token Token JWT cần giải mã
+     * @return Đối tượng Jwt chứa thông tin đã giải mã
+     * @throws JwtException Nếu token không hợp lệ hoặc có lỗi trong quá trình giải mã
+     */
     @Override
     public Jwt decode(String token) throws JwtException {
 

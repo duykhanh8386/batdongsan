@@ -22,6 +22,19 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtCookieFilter extends OncePerRequestFilter {
 
+    /**
+     * Phương thức chính của bộ lọc, được gọi cho mỗi yêu cầu HTTP.
+     * - Kiểm tra cookie có tên "JWT_TOKEN" trong yêu cầu.
+     * - Nếu tìm thấy, thêm token vào header Authorization với định dạng "Bearer <token>".
+     * - Sử dụng HttpServletRequestWrapper để bọc yêu cầu gốc và thêm header Authorization.
+     * - Nếu không tìm thấy token, tiếp tục chuỗi bộ lọc mà không thay đổi yêu cầu.
+     *
+     * @param request Yêu cầu HTTP từ client
+     * @param response Phản hồi HTTP gửi về client
+     * @param filterChain Chuỗi bộ lọc để tiếp tục xử lý yêu cầu
+     * @throws ServletException Nếu có lỗi liên quan đến servlet
+     * @throws IOException Nếu có lỗi I/O khi xử lý yêu cầu hoặc phản hồi
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -40,6 +53,13 @@ public class JwtCookieFilter extends OncePerRequestFilter {
         if (token != null && !token.isEmpty()) {
             final String authHeader = "Bearer " + token;
             HttpServletRequest wrappedRequest = new HttpServletRequestWrapper(request) {
+                /**
+                 * Ghi đè phương thức getHeader để trả về header Authorization với giá trị token.
+                 * Nếu tên header không phải "Authorization", trả về giá trị từ yêu cầu gốc.
+                 *
+                 * @param name Tên header
+                 * @return Giá trị header, "Bearer <token>" nếu là Authorization
+                 */
                 @Override
                 public String getHeader(String name) {
                     if ("Authorization".equalsIgnoreCase(name)) {
@@ -48,6 +68,13 @@ public class JwtCookieFilter extends OncePerRequestFilter {
                     return super.getHeader(name);
                 }
 
+                /**
+                 * Ghi đè phương thức getHeaders để trả về danh sách giá trị header Authorization.
+                 * Nếu tên header là "Authorization", trả về danh sách chứa token.
+                 *
+                 * @param name Tên header
+                 * @return Enumeration chứa giá trị header
+                 */
                 @Override
                 public Enumeration<String> getHeaders(String name) {
                     if ("Authorization".equalsIgnoreCase(name)) {
@@ -56,6 +83,12 @@ public class JwtCookieFilter extends OncePerRequestFilter {
                     return super.getHeaders(name);
                 }
 
+                /**
+                 * Ghi đè phương thức getHeaderNames để thêm "Authorization" vào danh sách tên header
+                 * nếu nó chưa tồn tại trong yêu cầu gốc.
+                 *
+                 * @return Enumeration chứa danh sách tên header
+                 */
                 @Override
                 public Enumeration<String> getHeaderNames() {
                     List<String> headerNames = Collections.list(super.getHeaderNames());

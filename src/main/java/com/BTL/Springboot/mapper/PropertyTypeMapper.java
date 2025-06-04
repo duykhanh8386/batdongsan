@@ -17,4 +17,15 @@ public class PropertyTypeMapper {
         dto.setTypeName(propertyType.getTypeName());
         return dto;
     }
+
+    public PropertyType toEntity(PropertyTypeDto dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        PropertyType propertyType = new PropertyType();
+        dto.setTypeId(dto.getTypeId());
+        dto.setTypeName(dto.getTypeName());
+        return propertyType;
+    }
 }

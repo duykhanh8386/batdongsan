@@ -35,4 +35,6 @@ class SpringbootApplicationTests {
 		log.info("BCrypt round 1: {}", passwordEncoder.encode(password));
 		log.info("BCrypt round 2: {}", passwordEncoder.encode(password));
 	}
+
+
 }

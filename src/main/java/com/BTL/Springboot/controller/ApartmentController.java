@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
@@ -93,7 +94,7 @@ public class ApartmentController {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=apartments.xlsx");
 
-        List<Project> list = projectService.getAll();
+        List<Project> list = projectService.getProjectByTypeId(21);
         ExcelExporterUtil exporter = new ExcelExporterUtil(list);
         exporter.export(response);
     }
@@ -103,7 +104,43 @@ public class ApartmentController {
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=apartments.pdf");
 
-        List<Project> list = projectService.getAll();
+        List<Project> list = projectService.getProjectByTypeId(21);
         PDFExporterUtil.export(response, list);
+    }
+
+    @PostMapping("/apartments/import/excel")
+    public String importExcel(@RequestParam("file") MultipartFile file,
+                              RedirectAttributes redirectAttributes) {
+        try {
+            if (file.isEmpty()) {
+                redirectAttributes.addFlashAttribute("successMessage", "Vui lòng chọn một file Excel.");
+                return "redirect:/project/apartments";
+            }
+
+            projectService.importFromExcel(file);
+            redirectAttributes.addFlashAttribute("successMessage", "Import thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Import bằng file không thành công!!");
+        }
+
+        return "redirect:/project/apartments";
+    }
+
+    @PostMapping("/apartments/import/pdf")
+    public String importPdf(@RequestParam("file") MultipartFile file,
+                              RedirectAttributes redirectAttributes) {
+        try {
+            if (file.isEmpty()) {
+                redirectAttributes.addFlashAttribute("successMessage", "Vui lòng chọn một file Pdf.");
+                return "redirect:/project/apartments";
+            }
+
+            projectService.readProjectsFromPdf(file);
+            redirectAttributes.addFlashAttribute("successMessage", "Import thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Import bằng file pdf không thành công!!");
+        }
+
+        return "redirect:/project/apartments";
     }
 }

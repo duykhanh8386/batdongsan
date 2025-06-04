@@ -493,6 +493,10 @@
             <span th:text="${successMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="row">
             <div class="col-lg-12">
 
@@ -599,11 +603,86 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <a th:href="@{#}" class="btn btn-success btn-sm me-1">
-                                    <i class="bi bi-file-earmark-arrow-up"></i> <span>Import</span>
-                                </a>
                                 <div class="dropdown">
+                                    <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="importDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-file-earmark-arrow-down"></i> <span>Import</span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                                        <li><a class="dropdown-item" th:href="@{#}" data-bs-toggle="modal" data-bs-target="#importExcelModal">Excel</a></li>
+                                        <li><a class="dropdown-item" th:href="@{#}" data-bs-toggle="modal" data-bs-target="#importPdfModal">PDF</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <form th:action="@{/project/apartments/import/excel}" method="post" enctype="multipart/form-data">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="importExcelModalLabel">Nhập dữ liệu từ file Excel</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <!-- Dropzone (dùng border, padding của Bootstrap) -->
+                                                    <div id="dropZone" class="border border-2 border-primary rounded-3 text-center p-4 bg-light" style="cursor: pointer;">
+                                                        <i class="bi bi-cloud-arrow-up-fill fs-1 text-primary"></i>
+                                                        <p class="text-muted mb-1">Kéo & thả file Excel tại đây<br>hoặc click để chọn</p>
+                                                        <input type="file" class="form-control d-none" id="fileInput" name="file" accept=".xlsx,.xls" required>
+                                                    </div>
+
+                                                    <!-- Hiển thị tên file và nút xóa -->
+                                                    <div id="filePreview" class="d-flex align-items-center justify-content-between border rounded px-3 py-2 mt-3 d-none">
+                                                        <span id="fileName" class="me-3 text-truncate w-100"></span>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" id="clearFile" title="Xóa file">
+                                                            <i class="bi bi-trash3"></i>
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success">Tải lên</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="importPdfModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <form th:action="@{/project/apartments/import/pdf}" method="post" enctype="multipart/form-data">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="importPdfModalLabel">Nhập dữ liệu từ file Pdf</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <!-- Dropzone (dùng border, padding của Bootstrap) -->
+                                                    <div id="dropZone_1" class="border border-2 border-primary rounded-3 text-center p-4 bg-light" style="cursor: pointer;">
+                                                        <i class="bi bi-cloud-arrow-up-fill fs-1 text-primary"></i>
+                                                        <p class="text-muted mb-1">Kéo & thả file Pdf tại đây<br>hoặc click để chọn</p>
+                                                        <input type="file" class="form-control d-none" id="fileInput_1" name="file" accept=".pdf" required>
+                                                    </div>
+
+                                                    <!-- Hiển thị tên file và nút xóa -->
+                                                    <div id="filePreview_1" class="d-flex align-items-center justify-content-between border rounded px-3 py-2 mt-3 d-none">
+                                                        <span id="fileName_1" class="me-3 text-truncate w-100"></span>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" id="clearFile_1" title="Xóa file">
+                                                            <i class="bi bi-trash3"></i>
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success">Tải lên</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown ms-1">
                                     <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-file-earmark-arrow-down"></i> <span>Xuất file</span>
                                     </button>
@@ -687,6 +766,72 @@
 <script th:src="@{/assets/vendor/quill/quill.js}"></script>
 <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
 <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script>
+    function setupDropZone(dropZoneId, inputId, previewId, nameId, clearId) {
+        const dropZone = document.getElementById(dropZoneId);
+        const fileInput = document.getElementById(inputId);
+        const filePreview = document.getElementById(previewId);
+        const fileNameDisplay = document.getElementById(nameId);
+        const clearFile = document.getElementById(clearId);
+
+        if (!dropZone || !fileInput || !filePreview || !fileNameDisplay || !clearFile) return;
+
+        // Click vào vùng dropzone để mở file picker
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        // Drag hover effect
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('bg-white', 'border-success');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('bg-white', 'border-success');
+        });
+
+        // Drop file vào
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('bg-white', 'border-success');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                showFile(files[0].name);
+            }
+        });
+
+        // Khi chọn file từ máy
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                showFile(fileInput.files[0].name);
+            }
+        });
+
+        // Xóa file đã chọn
+        clearFile.addEventListener('click', () => {
+            fileInput.value = "";
+            filePreview.classList.add('d-none');
+            fileNameDisplay.textContent = "";
+        });
+
+        // Hiển thị file
+        function showFile(name) {
+            fileNameDisplay.textContent = name;
+            filePreview.classList.remove('d-none');
+        }
+    }
+
+    // Kích hoạt 2 dropzones
+    setupDropZone('dropZone', 'fileInput', 'filePreview', 'fileName', 'clearFile'); // Excel
+    setupDropZone('dropZone_1', 'fileInput_1', 'filePreview_1', 'fileName_1', 'clearFile_1'); // PDF
+
+    // Ngăn browser mở file khi kéo thả ngoài vùng cho phép
+    document.addEventListener('dragover', e => e.preventDefault());
+    document.addEventListener('drop', e => e.preventDefault());
+</script>
+
+
+
 
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>

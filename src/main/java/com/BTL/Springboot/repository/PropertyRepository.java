@@ -18,12 +18,12 @@ public interface PropertyRepository extends JpaRepository<Property, Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Property p SET p.status = 'true' WHERE p.project.projectId = :projectId")
+    @Query("UPDATE Property p SET p.status = 'false' WHERE p.project.projectId = :projectId")
     void softDeletePropertiesByProject(@Param("projectId") Integer projectId);
 
     @Modifying
     @Transactional
-    @Query("UPDATE Property p SET p.status = 'false' WHERE p.project.projectId = :projectId")
+    @Query("UPDATE Property p SET p.status = 'true' WHERE p.project.projectId = :projectId")
     void restorePropertiesByProject(@Param("projectId") Integer projectId);
 
 }

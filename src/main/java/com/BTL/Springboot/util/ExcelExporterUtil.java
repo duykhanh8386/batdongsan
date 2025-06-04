@@ -68,9 +68,9 @@ public class ExcelExporterUtil {
 
         // Header row
         String[] headers = {
-                "Tên dự án", "Nhà phát triển", "Địa chỉ",
-                "Quận/Huyện", "Thành phố", "Diện tích",
-                "Ngày bắt đầu", "Ngày hoàn thành", "Trạng thái"
+                "Tên dự án","Nhà phát triển", "Địa chỉ",
+                "Quận/Huyện", "Thành phố", "Diện tích","Đơn giá",
+                "Ngày bắt đầu", "Ngày hoàn thành"
         };
         Row headerRow = sheet.createRow(0);
         for (int i = 0; i < headers.length; i++) {
@@ -103,18 +103,20 @@ public class ExcelExporterUtil {
             areaCell.setCellValue(apt.getTotalArea());
             areaCell.setCellStyle(decimalStyle);
 
-            Cell startDateCell = row.createCell(6);
+            Cell totalCell = row.createCell(6);
+            totalCell.setCellValue(apt.getTotalUnits());
+            totalCell.setCellStyle(decimalStyle);
+
+            Cell startDateCell = row.createCell(7);
             if (apt.getStartDate() != null)
                 startDateCell.setCellValue(apt.getStartDate());
             startDateCell.setCellStyle(dateStyle);
 
-            Cell endDateCell = row.createCell(7);
+            Cell endDateCell = row.createCell(8);
             if (apt.getCompletionDate() != null)
                 endDateCell.setCellValue(apt.getCompletionDate());
             endDateCell.setCellStyle(dateStyle);
 
-            row.createCell(8).setCellValue(apt.getStatus());
-            row.getCell(8).setCellStyle(textStyle);
         }
 
         // Auto resize columns

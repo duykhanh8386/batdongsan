@@ -616,6 +616,7 @@
                                     <ul class="dropdown-menu" aria-labelledby="exportDropdown">
                                         <li><a class="dropdown-item" th:href="@{#}" data-bs-toggle="modal" data-bs-target="#importExcelModal">Excel</a></li>
                                         <li><a class="dropdown-item" th:href="@{#}" data-bs-toggle="modal" data-bs-target="#importPdfModal">PDF</a></li>
+                                        <li><a class="dropdown-item" th:href="@{#}" data-bs-toggle="modal" data-bs-target="#importImageModal">Image</a></li>
                                     </ul>
                                 </div>
 
@@ -674,6 +675,41 @@
                                                     <div id="filePreview_1" class="d-flex align-items-center justify-content-between border rounded px-3 py-2 mt-3 d-none">
                                                         <span id="fileName_1" class="me-3 text-truncate w-100"></span>
                                                         <button type="button" class="btn btn-outline-danger btn-sm" id="clearFile_1" title="Xóa file">
+                                                            <i class="bi bi-trash3"></i>
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success">Tải lên</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="importImageModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <form th:action="@{/project/apartments/import/image}" method="post" enctype="multipart/form-data">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="importImageModalLabel">Nhập dữ liệu từ file Excel</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <!-- Dropzone (dùng border, padding của Bootstrap) -->
+                                                    <div id="dropZone_2" class="border border-2 border-primary rounded-3 text-center p-4 bg-light" style="cursor: pointer;">
+                                                        <i class="bi bi-cloud-arrow-up-fill fs-1 text-primary"></i>
+                                                        <p class="text-muted mb-1">Kéo & thả file Ảnh tại đây<br>hoặc click để chọn</p>
+                                                        <input type="file" class="form-control d-none" id="fileInput_2" name="file" accept=".png" required>
+                                                    </div>
+
+                                                    <!-- Hiển thị tên file và nút xóa -->
+                                                    <div id="filePreview_2" class="d-flex align-items-center justify-content-between border rounded px-3 py-2 mt-3 d-none">
+                                                        <span id="fileName_2" class="me-3 text-truncate w-100"></span>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" id="clearFile_2" title="Xóa file">
                                                             <i class="bi bi-trash3"></i>
                                                         </button>
                                                     </div>
@@ -830,7 +866,7 @@
     // Kích hoạt 2 dropzones
     setupDropZone('dropZone', 'fileInput', 'filePreview', 'fileName', 'clearFile'); // Excel
     setupDropZone('dropZone_1', 'fileInput_1', 'filePreview_1', 'fileName_1', 'clearFile_1'); // PDF
-
+    setupDropZone('dropZone_2', 'fileInput_2', 'filePreview_2', 'fileName_2', 'clearFile_2'); //image
     // Ngăn browser mở file khi kéo thả ngoài vùng cho phép
     document.addEventListener('dragover', e => e.preventDefault());
     document.addEventListener('drop', e => e.preventDefault());

@@ -11,6 +11,7 @@ import com.BTL.Springboot.service.UserAccountService;
 import com.BTL.Springboot.util.ExcelExporterUtil;
 import com.BTL.Springboot.util.PDFExporterUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import net.sourceforge.tess4j.TesseractException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -178,6 +179,32 @@ public class ApartmentController {
             redirectAttributes.addFlashAttribute("errorMessage", "Import bằng file pdf không thành công!!");
         }
 
+        return "redirect:/project/apartments";
+    }
+
+    @PostMapping("/apartments/import/image")
+    public String uploadProjectFromImage(@RequestParam("file") MultipartFile file,
+                                         RedirectAttributes redirectAttributes) throws TesseractException, IOException {
+        // 1. OCR ảnh thành text
+        String ocrText = projectService.extractTextFromImage(file);
+
+        // 2. Lấy PropertyType mặc định
+        PropertyType defaultType = propertyTyperService.getPropertyTypeById(21);
+
+        try{
+        // 3. Parse text thành Project
+        Project project = projectService.parse(ocrText, defaultType);
+
+        // 4. Lưu vào database
+        projectService.saveProject(project);
+            if (file.isEmpty()) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng chọn một file Pdf.");
+                return "redirect:/project/apartments";
+            }
+            redirectAttributes.addFlashAttribute("successMessage", "Import thành công!");
+        }catch(Exception e){
+            redirectAttributes.addFlashAttribute("errorMessage", "Import bằng ảnh không thành công!!");
+        }
         return "redirect:/project/apartments";
     }
 }

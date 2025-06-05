@@ -8,6 +8,9 @@ import com.BTL.Springboot.mapper.Map;
 import com.BTL.Springboot.repository.*;
 import com.BTL.Springboot.service.ProjectService;
 import jakarta.transaction.Transactional;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -20,14 +23,22 @@ import technology.tabula.Page;
 import technology.tabula.RectangularTextContainer;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -147,6 +158,7 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.findAll();
     }
 
+    //Hàm đọc lấy dữ liệu từ excel
     public void importFromExcel(MultipartFile file) throws IOException {
         List<Project> projects = new ArrayList<>();
 
@@ -184,8 +196,9 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectRepository.saveAll(projects);
     }
-    // === Helper methods ===
 
+
+    //Start : Các hàm giúp hỗ trợ map kiểu dữ liệu từ excel
     private String getString(Cell cell) {
         return cell != null ? cell.toString().trim() : null;
     }
@@ -215,7 +228,9 @@ public class ProjectServiceImpl implements ProjectService {
         } catch (Exception ignored) {}
         return null;
     }
+    //End
 
+    //Dọc dữ liệu từ file pdf
     @Override
     public void readProjectsFromPdf(MultipartFile file) throws IOException {
         List<Project> projects = new ArrayList<>();
@@ -269,15 +284,17 @@ public class ProjectServiceImpl implements ProjectService {
             }
 
             if (projects.isEmpty()) {
-                System.out.println("⚠ Không có dự án nào được đọc từ file.");
+                System.out.println(" Không có dự án nào được đọc từ file.");
             } else {
                 projectRepository.saveAll(projects);
             }
 
         } catch (Exception e) {
-            throw new IOException(" Lỗi khi xử lý file PDF: " + e.getMessage(), e);
+            throw new IOException("Lỗi khi xử lý file PDF: " + e.getMessage(), e);
         }
     }
+
+    //Format dữ liệu để đọc từ file pdf
     private String smartCleanCell(RectangularTextContainer cell) {
         if (cell == null) return "";
         String text = cell.getText();
@@ -295,4 +312,161 @@ public class ProjectServiceImpl implements ProjectService {
         // 4. Loại khoảng trắng dư
         return text.trim().replaceAll(" +", " ");
     }
+
+
+    @Override
+    public Project parse(String text, PropertyType defaultType) {
+        Project project = new Project();
+
+        // Chuẩn hóa lỗi OCR
+        text = correctCommonMistakes(text);
+
+        String[] lines = text.split("\\n");
+
+        for (String line : lines) {
+            String lower = line.toLowerCase();
+
+            if (containsAny(lower, "tên", "dự án", "project name")) {
+                project.setProjectName(extractValue(line));
+            } else if (containsAny(lower, "công ty", "chủ đầu tư", "developer")) {
+                project.setDeveloper(extractValue(line));
+            } else if (containsAny(lower, "diện tích", "area")) {
+                project.setTotalArea(extractDouble(line));
+            } else if (containsAny(lower, "số lượng", "units")) {
+                project.setTotalUnits(extractInt(line));
+            } else if (containsAny(lower, "thành phố", "city")) {
+                project.setCity(extractValue(line));
+            } else if (containsAny(lower, "tỉnh", "state")) {
+                project.setState(extractValue(line));
+            } else if (containsAny(lower, "vị trí", "địa điểm", "location")) {
+                project.setLocation(extractValue(line));
+            } else if (containsAny(lower, "bắt đầu", "khởi công", "start date")) {
+                project.setStartDate(extractDate(line));
+            } else if (containsAny(lower, "hoàn thành", "completion")) {
+                project.setCompletionDate(extractDate(line));
+            } else if (containsAny(lower, "trạng thái", "status")) {
+                project.setStatus(extractValue(line));
+            } else if (containsAny(lower, "mô tả", "giới thiệu", "description")) {
+                project.setDescription(extractValue(line));
+            }
+        }
+
+        project.setProjectType(defaultType);
+        project.setCreatedAt(LocalDateTime.now());
+        project.setUpdatedAt(LocalDateTime.now());
+
+        // Mặc định nếu thiếu dữ liệu
+        if (project.getProjectName() == null) project.setProjectName("Không tên");
+        if (project.getDeveloper() == null) project.setDeveloper("Không rõ");
+        if (project.getCity() == null) project.setCity("Không rõ");
+        if (project.getState() == null) project.setState("Không rõ");
+        if (project.getLocation() == null) project.setLocation("Không rõ");
+        if (project.getStatus() == null) project.setStatus("Đang cập nhật");
+        if (project.getTotalArea() == null) project.setTotalArea(0.0);
+        if (project.getTotalUnits() == null) project.setTotalUnits(0);
+
+        return project;
+    }
+
+    // =================== OCR =====================
+
+    public String extractTextFromImage(MultipartFile file) throws IOException, TesseractException {
+        String ext = FilenameUtils.getExtension(file.getOriginalFilename());
+        File convFile = File.createTempFile("uploaded_", "." + ext);
+        file.transferTo(convFile);
+
+        BufferedImage image = ImageIO.read(convFile);
+        if (image == null) {
+            throw new IllegalArgumentException("Không thể đọc ảnh hoặc định dạng không hỗ trợ: " + file.getOriginalFilename());
+        }
+
+        Tesseract tesseract = new Tesseract();
+        File tessdataDir = extractTessdataFromResources();
+        tesseract.setDatapath(tessdataDir.getAbsolutePath());
+        tesseract.setLanguage("vie+eng");
+
+        String rawText = tesseract.doOCR(image);
+        return correctCommonMistakes(rawText);
+    }
+
+    // =================== Fix lỗi OCR =====================
+
+    private String correctCommonMistakes(String text) {
+        java.util.Map<String, String> corrections = new HashMap<>();
+        corrections.put("°", "9");
+        corrections.put("¡", "i");
+        corrections.put("!", "I");
+        corrections.put("HC!", "HCM");
+        corrections.put("HCl", "HCM");
+        corrections.put("HCH", "HCM");
+        corrections.put("iiC", "HCM");
+        corrections.put("!CM", "HCM");
+        corrections.put("TP.!C!", "TP.HCM");
+        corrections.put("TP.HCH", "TP.HCM");
+        corrections.put("TP.iiC", "TP.HCM");
+
+        corrections.put("Dy án", "Dự án");
+        corrections.put("Dư án", "Dự án");
+        corrections.put("&", "ở");
+        corrections.put("mô tà", "mô tả");
+        corrections.put("trang thái", "trạng thái");
+        corrections.put("bat đầu", "bắt đầu");
+        corrections.put("hoan thành", "hoàn thành");
+
+        for (java.util.Map.Entry<String, String> entry : corrections.entrySet()) {
+            text = text.replace(entry.getKey(), entry.getValue());
+        }
+
+        return text;
+    }
+
+    // =================== Dữ liệu từng dòng =====================
+
+    private String extractValue(String line) {
+        return line.contains(":") ? line.split(":", 2)[1].trim() : line.trim();
+    }
+
+    private Double extractDouble(String line) {
+        Matcher matcher = Pattern.compile("(\\d+[.,]?\\d*)").matcher(line);
+        return matcher.find() ? Double.parseDouble(matcher.group(1).replace(",", ".")) : 0.0;
+    }
+
+    private Integer extractInt(String line) {
+        Matcher matcher = Pattern.compile("(\\d+)").matcher(line);
+        return matcher.find() ? Integer.parseInt(matcher.group(1)) : 0;
+    }
+
+    private LocalDate extractDate(String line) {
+        Matcher matcher = Pattern.compile("(\\d{2}/\\d{2}/\\d{4})").matcher(line);
+        if (matcher.find()) {
+            return LocalDate.parse(matcher.group(1), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
+        return null;
+    }
+
+    // =================== Trích tessdata =====================
+
+    private File extractTessdataFromResources() throws IOException {
+        InputStream engStream = getClass().getClassLoader().getResourceAsStream("tessdata/eng.traineddata");
+        InputStream vieStream = getClass().getClassLoader().getResourceAsStream("tessdata/vie.traineddata");
+
+        File tempTessdata = new File(System.getProperty("java.io.tmpdir"), "tessdata");
+        if (!tempTessdata.exists()) tempTessdata.mkdirs();
+
+        Files.copy(engStream, new File(tempTessdata, "eng.traineddata").toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(vieStream, new File(tempTessdata, "vie.traineddata").toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+        return tempTessdata;
+    }
+
+    // =================== Tiện ích =====================
+
+    private boolean containsAny(String line, String... keywords) {
+        for (String keyword : keywords) {
+            if (line.contains(keyword)) return true;
+        }
+        return false;
+    }
+
+
 }

@@ -1,11 +1,13 @@
 package com.BTL.Springboot.controller;
 
+import com.BTL.Springboot.dto.response.user.UserAccountDto;
 import com.BTL.Springboot.entity.Project;
 import com.BTL.Springboot.entity.Property;
 import com.BTL.Springboot.entity.PropertyType;
 import com.BTL.Springboot.service.Impl.ProjectServiceImpl;
 import com.BTL.Springboot.service.Impl.PropertyServiceImpl;
 import com.BTL.Springboot.service.Impl.PropertyTypeServiceImpl;
+import com.BTL.Springboot.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +27,22 @@ public class IndustrialController {
 
     @Autowired
     private PropertyTypeServiceImpl propertyTyperService;
+    @Autowired
+    private UserAccountService userAccountService;
 
     @GetMapping("/industrial-zones")
     public String navigate3(Model model){
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            model.addAttribute("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            model.addAttribute("user", new Object()); // Truyền object rỗng nếu có lỗi
+        }
         model.addAttribute("project", new Project());
         model.addAttribute("propertyTypes", propertyTyperService.getAllPropertyType());
         model.addAttribute("industrials", projectService.getProjectByProjectTypeId(24));
@@ -37,6 +52,17 @@ public class IndustrialController {
 
     @GetMapping("/industrial-zones/view/{id}")
     public String viewProject(@PathVariable("id") Integer id, Model model) {
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            model.addAttribute("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            model.addAttribute("user", new Object()); // Truyền object rỗng nếu có lỗi
+        }
         // Tìm project theo ID
         Project project = projectService.getProjectById(id);
         List<Property> properties = propertyService.getPropertyByProjectId(id);
@@ -47,6 +73,17 @@ public class IndustrialController {
 
     @GetMapping("/industrial-zones/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            model.addAttribute("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            model.addAttribute("user", new Object()); // Truyền object rỗng nếu có lỗi
+        }
         Project project = projectService.getProjectById(id);
 
         List<PropertyType> propertyTypes = propertyTyperService.getAllPropertyType();

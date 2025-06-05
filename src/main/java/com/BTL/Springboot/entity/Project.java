@@ -1,10 +1,10 @@
 package com.BTL.Springboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,11 +46,9 @@ public class Project {
     @Column(name = "total_units", nullable = false)
     private Integer totalUnits;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "start_date")
     private LocalDate startDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "completion_date")
     private LocalDate completionDate;
 
@@ -66,6 +64,7 @@ public class Project {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "project")
     private List<Property> properties;
 }

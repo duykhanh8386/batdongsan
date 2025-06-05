@@ -1,15 +1,17 @@
 package com.BTL.Springboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "property_types")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PropertyType {
@@ -24,9 +26,11 @@ public class PropertyType {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "propertyType")
     private List<Property> properties;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "projectType")
     private List<Project> projects;
 }

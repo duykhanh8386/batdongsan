@@ -1,6 +1,6 @@
 package com.BTL.Springboot.service.Impl;
 
-import com.BTL.Springboot.dto.ProjectDto;
+import com.BTL.Springboot.dto.response.project.ProjectDto;
 import com.BTL.Springboot.entity.Project;
 import com.BTL.Springboot.entity.ProjectTrashBin;
 import com.BTL.Springboot.entity.PropertyType;
@@ -9,10 +9,10 @@ import com.BTL.Springboot.repository.*;
 import com.BTL.Springboot.service.ProjectService;
 import jakarta.transaction.Transactional;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import technology.tabula.ObjectExtractor;
@@ -20,17 +20,14 @@ import technology.tabula.Page;
 import technology.tabula.RectangularTextContainer;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -59,12 +56,20 @@ public class ProjectServiceImpl implements ProjectService {
     private PaymentRepository paymentRepository;
 
     @Override
-    public List<ProjectDto> getProjectByProjectTypeId(int typeId) {
-        List<ProjectDto> list = projectRepository.findByProjectTypeIdAndNotDeleted(typeId)
-                .stream()
-                .map(Map::toProjectDto)
-                .collect(Collectors.toList());
-        return list;
+    public List<ProjectDto> getAllProjects() {
+        return projectRepository.findAll().stream()
+                .map(Map::toProjectDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public Project getProjectById(Integer projectId) {
+        return projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+    }
+
+    @Override
+    public List<Project> findByProjectName(String projectName) {
+        return projectRepository.findByProjectName(projectName);
     }
 
     @Override
@@ -78,6 +83,17 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.findById(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
+    @Override
+    public List<ProjectDto> getProjectByProjectTypeId(int typeId) {
+        List<ProjectDto> list = projectRepository.findByProjectTypeIdAndNotDeleted(typeId)
+                .stream()
+                .map(Map::toProjectDto)
+                .collect(Collectors.toList());
+        return list;
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public void updateProject(int id,Project updatedProject) {
         Project project = projectRepository.findById(id);
@@ -97,6 +113,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     public void deleteProject(int id) {
         Project project = projectRepository.findById(id);
@@ -116,6 +133,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectTrashRepository.save(projectTrashBinEntity);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
     @Transactional
     public void saveProject(Project project) {
@@ -244,7 +262,7 @@ public class ProjectServiceImpl implements ProjectService {
 
                             projects.add(p);
                         } catch (Exception e) {
-                            System.err.println("❌ Lỗi khi đọc dòng " + i + ": " + e.getMessage());
+                            System.err.println(" Lỗi khi đọc dòng " + i + ": " + e.getMessage());
                         }
                     }
                 }
@@ -257,7 +275,7 @@ public class ProjectServiceImpl implements ProjectService {
             }
 
         } catch (Exception e) {
-            throw new IOException("❌ Lỗi khi xử lý file PDF: " + e.getMessage(), e);
+            throw new IOException(" Lỗi khi xử lý file PDF: " + e.getMessage(), e);
         }
     }
     private String smartCleanCell(RectangularTextContainer cell) {

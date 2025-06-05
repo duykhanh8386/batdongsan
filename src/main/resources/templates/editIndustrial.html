@@ -136,43 +136,59 @@
       <li class="nav-item dropdown pe-3">
         <a class="nav-link nav-profile d-flex align-items-center pe-0" th:href="@{#}" data-bs-toggle="dropdown">
           <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block dropdown-toggle ps-2">D. Khánh</span>
-        </a>
+          <span class="d-none d-md-block dropdown-toggle ps-2"
+                th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">T. Đạt</span>
+        </a><!-- End Profile Image Icon -->
+
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
           <li class="dropdown-header">
-            <h6>Đoàn Duy Khánh</h6>
-            <span>Quản lý</span>
+            <h6 th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">Đỗ Tuấn Đạt</h6>
+            <span th:text="${(user != null and user.role != null) ? user.role.roleName : 'Khách'}">Quản lý</span>
           </li>
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
           <li>
             <a class="dropdown-item d-flex align-items-center" th:href="@{/users-profile.html}">
               <i class="bi bi-person"></i>
               <span>Hồ sơ của tôi</span>
             </a>
           </li>
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
           <li>
             <a class="dropdown-item d-flex align-items-center" th:href="@{/users-profile.html}">
               <i class="bi bi-gear"></i>
               <span>Cài đặt</span>
             </a>
           </li>
-          <li><hr class="dropdown-divider"></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
           <li>
             <a class="dropdown-item d-flex align-items-center" th:href="@{/pages-faq.html}">
               <i class="bi bi-question-circle"></i>
               <span>Trợ giúp?</span>
             </a>
           </li>
-          <li><hr class="dropdown-divider"></li>
           <li>
-            <a class="dropdown-item d-flex align-items-center" th:href="@{#}">
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/auth/logout}">
               <i class="bi bi-box-arrow-right"></i>
               <span>Đăng xuất</span>
             </a>
           </li>
-        </ul>
-      </li>
+        </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
     </ul>
   </nav>
 </header>

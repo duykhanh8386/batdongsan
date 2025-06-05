@@ -1,12 +1,15 @@
 package com.BTL.Springboot.service;
 
+import com.BTL.Springboot.dto.response.property_type.PropertyTypeDto;
 import com.BTL.Springboot.entity.PropertyType;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PropertyTypeService {
     List<PropertyType> getAllPropertyType();
-    PropertyType getPropertyTypeById(int id);
+
+    List<PropertyTypeDto> getAllPropertyTypes();
+    PropertyType getPropertyTypeById(Integer typeId);
     public PropertyType getPropertyTypeByName(String typeName);
+
 }

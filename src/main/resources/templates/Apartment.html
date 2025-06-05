@@ -209,16 +209,18 @@
             </li><!-- End Messages Nav -->
 
             <li class="nav-item dropdown pe-3">
-
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" th:href="@{#}" data-bs-toggle="dropdown">
                     <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2">D. Khánh</span>
+                    <span class="d-none d-md-block dropdown-toggle ps-2"
+                          th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">T. Đạt</span>
                 </a><!-- End Profile Image Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
-                        <h6>Đoàn Duy Khánh</h6>
-                        <span>Quản lý</span>
+                        <h6 th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">Đỗ Tuấn Đạt</h6>
+                        <span th:text="${(user != null and user.role != null) ? user.role.roleName : 'Khách'}">Quản lý</span>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
@@ -255,12 +257,11 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" th:href="@{#}">
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/auth/logout}">
                             <i class="bi bi-box-arrow-right"></i>
                             <span>Đăng xuất</span>
                         </a>
                     </li>
-
                 </ul><!-- End Profile Dropdown Items -->
             </li><!-- End Profile Nav -->
 
@@ -275,7 +276,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/index.html}">
+            <a class="nav-link " th:href="@{/home}">
                 <i class="bi bi-grid"></i>
                 <span>Tổng quát</span>
             </a>
@@ -283,17 +284,22 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" th:href="@{#}">
-                <i class="bi bi-menu-button-wide"></i><span>Nhà đất</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-menu-button-wide"></i><span>Bất động sản</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{#}">
-                        <i class="bi bi-circle"></i><span>Nhà đất bán</span>
+                    <a th:href="@{/properties/for-sale}">
+                        <i class="bi bi-circle"></i><span>Bán</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{#}">
-                        <i class="bi bi-circle"></i><span>Nhà đất cho thuê</span>
+                    <a th:href="@{/properties/for-rent}">
+                        <i class="bi bi-circle"></i><span>Cho thuê</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/deleted-property/all}">
+                        <i class="bi bi-circle"></i><span>Thùng rác</span>
                     </a>
                 </li>
             </ul>
@@ -711,7 +717,7 @@
                                 <td th:text="${apartment.developer}"></td>
                                 <td>
                                     <div class="d-block">
-                                    <span th:text="${apartment.location}"></span>
+                                        <span th:text="${apartment.location}"></span>
                                         <div>
                                             <span th:text="${apartment.state}"></span>
                                             <span th:text="${apartment.city}"></span>

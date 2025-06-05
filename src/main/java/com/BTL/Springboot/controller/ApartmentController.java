@@ -1,11 +1,13 @@
 package com.BTL.Springboot.controller;
 
+import com.BTL.Springboot.dto.response.user.UserAccountDto;
 import com.BTL.Springboot.entity.Project;
 import com.BTL.Springboot.entity.Property;
 import com.BTL.Springboot.entity.PropertyType;
 import com.BTL.Springboot.service.Impl.ProjectServiceImpl;
 import com.BTL.Springboot.service.Impl.PropertyServiceImpl;
 import com.BTL.Springboot.service.Impl.PropertyTypeServiceImpl;
+import com.BTL.Springboot.service.UserAccountService;
 import com.BTL.Springboot.util.ExcelExporterUtil;
 import com.BTL.Springboot.util.PDFExporterUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,8 +33,22 @@ public class ApartmentController {
     @Autowired
     private PropertyTypeServiceImpl propertyTyperService;
 
+    @Autowired
+    private UserAccountService userAccountService;
+
     @GetMapping("/apartments")
     public String navigate(Model model){
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            model.addAttribute("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            model.addAttribute("user", new Object()); // Truyền object rỗng nếu có lỗi
+        }
         model.addAttribute("project", new Project());
         model.addAttribute("propertyTypes", propertyTyperService.getAllPropertyType());
         model.addAttribute("apartments", projectService.getProjectByProjectTypeId(21));
@@ -41,6 +57,17 @@ public class ApartmentController {
 
     @GetMapping("/apartments/view/{id}")
     public String viewProject(@PathVariable("id") Integer id, Model model) {
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            model.addAttribute("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            model.addAttribute("user", new Object()); // Truyền object rỗng nếu có lỗi
+        }
         // Tìm project theo ID
         Project project = projectService.getProjectById(id);
         List<Property> properties = propertyService.getPropertyByProjectId(id);
@@ -51,6 +78,17 @@ public class ApartmentController {
 
     @GetMapping("/apartments/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
+        try {
+            UserAccountDto user = userAccountService.getMyInfo();
+            System.out.println("User data: " + user);
+            System.out.println("Role: " + user.getRole());
+            System.out.println("Employee: " + user.getEmployee());
+            System.out.println("Customer: " + user.getCustomer());
+            model.addAttribute("user", user != null ? user : new Object()); // Truyền object rỗng nếu null
+        } catch (Exception e) {
+            System.out.println("Error fetching user info: " + e.getMessage());
+            model.addAttribute("user", new Object()); // Truyền object rỗng nếu có lỗi
+        }
         Project project = projectService.getProjectById(id);
 
         List<PropertyType> propertyTypes = propertyTyperService.getAllPropertyType();
@@ -107,7 +145,6 @@ public class ApartmentController {
         List<Project> list = projectService.getProjectByTypeId(21);
         PDFExporterUtil.export(response, list);
     }
-
     @PostMapping("/apartments/import/excel")
     public String importExcel(@RequestParam("file") MultipartFile file,
                               RedirectAttributes redirectAttributes) {
@@ -128,7 +165,7 @@ public class ApartmentController {
 
     @PostMapping("/apartments/import/pdf")
     public String importPdf(@RequestParam("file") MultipartFile file,
-                              RedirectAttributes redirectAttributes) {
+                            RedirectAttributes redirectAttributes) {
         try {
             if (file.isEmpty()) {
                 redirectAttributes.addFlashAttribute("successMessage", "Vui lòng chọn một file Pdf.");

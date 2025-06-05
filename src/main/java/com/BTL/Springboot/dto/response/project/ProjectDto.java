@@ -1,4 +1,4 @@
-package com.BTL.Springboot.dto;
+package com.BTL.Springboot.dto.response.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -3,16 +3,17 @@ package com.BTL.Springboot.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "properties")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Property {
@@ -24,10 +25,12 @@ public class Property {
     @Column(name = "property_code", nullable = false, unique = true, length = 20)
     private String propertyCode;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "property_type_id", nullable = false)
     private PropertyType propertyType;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
@@ -66,16 +69,17 @@ public class Property {
     private Byte floors;
 
     @Column(name = "year_built")
-    private LocalDate yearBuilt;
+    private Date yearBuilt;
 
     @Column(name = "is_furnished", nullable = false)
     private Boolean isFurnished = false;
 
+    @JsonIgnore
     @Column(name = "listing_type", nullable = false, length = 50)
     private String listingType;
 
     @Column(name = "status", nullable = false, length = 50)
-    private String status = "available";
+    private String status;
 
     @JsonIgnore
     @ManyToOne
@@ -87,11 +91,11 @@ public class Property {
     @JoinColumn(name = "listing_agent_id", nullable = false)
     private Employee listingAgent;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "property")
@@ -102,7 +106,7 @@ public class Property {
     private List<PropertyImage> images;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "property" )
+    @OneToMany(mappedBy = "property")
     private List<Transaction> transactions;
 
     @JsonIgnore

@@ -13,17 +13,13 @@ import lombok.NoArgsConstructor;
 public class PropertyFeature {
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "property_id", nullable = false)
-    private Property property;
-
-    @Id
     @Column(name = "feature_name", nullable = false, length = 50)
     private String featureName;
 
     @Column(name = "feature_value", length = 100)
     private String featureValue;
 
-    @Column(name = "is_active")
-    private String isActive;
+    @ManyToOne
+    @JoinColumn(name = "property_id", nullable = false)
+    private Property property;
 }

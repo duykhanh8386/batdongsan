@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Dashboard - NiceAdmin Bootstrap Template</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+  <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<style>
+  #qr-reader {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    margin: 0 auto;
+    border: 2px solid #00ff00;
+    overflow: hidden;
+    background-color: #000;
+  }
+  #qr-reader video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Đảm bảo video lấp đầy khung */
+  }
+  #qr-reader::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 250px;
+    height: 250px;
+    border: 2px dashed #ff0;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #ff0;
+    pointer-events: none;
+  }
+  #qr-reader-result {
+    color: #dc3545;
+    font-weight: bold;
+    text-align: center;
+  }
+</style>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+  <div class="d-flex align-items-center justify-content-between">
+    <a th:href="@{/home}" class="logo text-align-center">
+      <div><img th:src="@{https://staticfile.batdongsan.com.vn/images/logo/standard/red/logo.svg}" alt=""></div>
+      <div><span class="d-none d-lg-block">NiceHomelander</span></div>
+    </a>
+    <i class="bi bi-list toggle-sidebar-btn"></i>
+  </div><!-- End Logo -->
+
+  <div class="search-bar">
+    <form class="search-form d-flex align-items-center" method="POST" th:action="@{#}">
+      <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+      <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+    </form>
+  </div><!-- End Search Bar -->
+
+  <nav class="header-nav ms-auto">
+    <ul class="d-flex align-items-center">
+
+      <li class="nav-item d-block d-lg-none">
+        <a class="nav-link nav-icon search-bar-toggle" th:href="@{#}">
+          <i class="bi bi-search"></i>
+        </a>
+      </li><!-- End Search Icon-->
+
+      <li class="nav-item dropdown">
+
+        <a class="nav-link nav-icon" th:href="@{#}" data-bs-toggle="dropdown">
+          <i class="bi bi-bell"></i>
+          <span class="badge bg-primary badge-number">4</span>
+        </a><!-- End Notification Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+          <li class="dropdown-header">
+            You have 4 new notifications
+            <a th:href="@{#}"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-exclamation-circle text-warning"></i>
+            <div>
+              <h4>Lorem Ipsum</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>30 min. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-x-circle text-danger"></i>
+            <div>
+              <h4>Atque rerum nesciunt</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>1 hr. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-check-circle text-success"></i>
+            <div>
+              <h4>Sit rerum fuga</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>2 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="notification-item">
+            <i class="bi bi-info-circle text-primary"></i>
+            <div>
+              <h4>Dicta reprehenderit</h4>
+              <p>Quae dolorem earum veritatis oditseno</p>
+              <p>4 hrs. ago</p>
+            </div>
+          </li>
+
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li class="dropdown-footer">
+            <a th:href="@{#}">Show all notifications</a>
+          </li>
+
+        </ul><!-- End Notification Dropdown Items -->
+
+      </li><!-- End Notification Nav -->
+
+      <li class="nav-item dropdown">
+
+        <a class="nav-link nav-icon" th:href="@{#}" data-bs-toggle="dropdown">
+          <i class="bi bi-chat-left-text"></i>
+          <span class="badge bg-success badge-number">3</span>
+        </a><!-- End Messages Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+          <li class="dropdown-header">
+            You have 3 new messages
+            <a th:href="@{#}"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a th:href="@{#}">
+              <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
+              <div>
+                <h4>Maria Hudson</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>4 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a th:href="@{#}">
+              <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
+              <div>
+                <h4>Anna Nelson</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>6 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="message-item">
+            <a th:href="@{#}">
+              <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
+              <div>
+                <h4>David Muldon</h4>
+                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                <p>8 hrs. ago</p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li class="dropdown-footer">
+            <a th:href="@{#}">Show all messages</a>
+          </li>
+
+        </ul><!-- End Messages Dropdown Items -->
+
+      </li><!-- End Messages Nav -->
+
+      <li class="nav-item dropdown pe-3">
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" th:href="@{#}" data-bs-toggle="dropdown">
+          <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+          <span class="d-none d-md-block dropdown-toggle ps-2"
+                th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">T. Đạt</span>
+        </a><!-- End Profile Image Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+            <h6 th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">Đỗ Tuấn Đạt</h6>
+            <span th:text="${(user != null and user.role != null) ? user.role.roleName : 'Khách'}">Quản lý</span>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/users-profile.html}">
+              <i class="bi bi-person"></i>
+              <span>Hồ sơ của tôi</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/users-profile.html}">
+              <i class="bi bi-gear"></i>
+              <span>Cài đặt</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/pages-faq.html}">
+              <i class="bi bi-question-circle"></i>
+              <span>Trợ giúp?</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/auth/logout}">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Đăng xuất</span>
+            </a>
+          </li>
+        </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
+
+    </ul>
+  </nav><!-- End Icons Navigation -->
+
+</header><!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/home}">
+        <i class="bi bi-grid"></i>
+        <span>Tổng quát</span>
+      </a>
+    </li><!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link " data-bs-target="#components-nav" data-bs-toggle="collapse" th:href="@{#}">
+        <i class="bi bi-menu-button-wide"></i><span>Bất động sản</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="components-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+        <li>
+          <a th:href="@{/properties/for-sale}">
+            <i class="bi bi-circle"></i><span>Bán</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/properties/for-rent}" class="active">
+            <i class="bi bi-circle"></i><span>Cho thuê</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/deleted-property/all}">
+            <i class="bi bi-circle"></i><span>Thùng rác</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End Components Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" th:href="@{#}">
+        <i class="bi bi-journal-text"></i><span>Dự án</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a th:href="@{/project/apartments}">
+            <i class="bi bi-circle"></i><span>Căn hộ chung cư</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/project/offices}">
+            <i class="bi bi-circle"></i><span>Văn phòng</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/project/industrial-zones}">
+            <i class="bi bi-circle"></i><span>Khu công nghiệp</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/project/houses}">
+            <i class="bi bi-circle"></i><span>Nhà ở</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/project/trashs}">
+            <i class="bi bi-circle"></i><span>Thùng rác</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End Forms Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{#}">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Giao dịch</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a th:href="@{/tables-general.html}">
+            <i class="bi bi-circle"></i><span>Đặt phòng</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/tables-general.html}">
+            <i class="bi bi-circle"></i><span>Mua đất</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/tables-data.html}">
+            <i class="bi bi-circle"></i><span>Hóa đơn</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/tables-data.html}">
+            <i class="bi bi-circle"></i><span>Xuất/Hủy</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End Tables Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" th:href="@{#}">
+        <i class="bi bi-bar-chart"></i><span>Báo cáo</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="charts-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a th:href="@{/charts-chartjs.html}">
+            <i class="bi bi-circle"></i><span>Biểu đồ</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/charts-apexcharts.html}">
+            <i class="bi bi-circle"></i><span>Báo cáo thị trường</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/charts-echarts.html}">
+            <i class="bi bi-circle"></i><span>Doanh thu</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/charts-echarts.html}">
+            <i class="bi bi-circle"></i><span>Tin tức</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End Charts Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" th:href="@{#}">
+        <i class="bi bi-gem"></i><span>Đối tác</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="icons-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a th:href="@{/icons-bootstrap.html}">
+            <i class="bi bi-circle"></i><span>Khách hàng</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/icons-remix.html}">
+            <i class="bi bi-circle"></i><span>Nhà cung cấp</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End Icons Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#staff-nav" data-bs-toggle="collapse" th:href="@{#}">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Nhân viên</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="staff-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a th:href="@{/employee}">
+            <i class="bi bi-circle"></i><span>Nhân viên</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/tables-general.html}">
+            <i class="bi bi-circle"></i><span>Lịch làm việc</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/tables-data.html}">
+            <i class="bi bi-circle"></i><span>Chấm công</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/tables-data.html}">
+            <i class="bi bi-circle"></i><span>Bảng tính lương</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End Tables Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#sell-nav" data-bs-toggle="collapse" th:href="@{#}">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Bán online</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="sell-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a th:href="@{/tables-general.html}">
+            <i class="bi bi-circle"></i><span>Website</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/tables-general.html}">
+            <i class="bi bi-circle"></i><span>Facebook Fanpage</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/tables-data.html}">
+            <i class="bi bi-circle"></i><span>Wiki BDS</span>
+          </a>
+        </li>
+      </ul>
+    </li><!-- End Tables Nav -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-target="#money-nav" data-bs-toggle="collapse" th:href="@{#}">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Sổ quỹ</span>
+      </a>
+    </li><!-- End Số quỹ -->
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" th:href="@{/users-profile.html}">
+        <i class="bi bi-person"></i>
+        <span>Profile</span>
+      </a>
+    </li><!-- End Profile Page Nav -->
+
+  </ul>
+
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Bất động sản cho thuê</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/home}">Tổng quát</a></li>
+        <li class="breadcrumb-item">Trang</li>
+        <li class="breadcrumb-item active">Bất động sản cho thuê</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <div>
+    <!-- Success message -->
+    <th:block th:if="${successMessage}">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </th:block>
+    <!-- Error message -->
+    <th:block th:if="${errorMessage}">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </th:block>
+  </div>
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="card-title">Bất động sản cho thuê</h3>
+              <div class="d-flex">
+                <!-- Nút Thêm mới -->
+                <a href="#" class="btn btn-success ms-1" data-bs-toggle="modal" data-bs-target="#addPropertyModal">
+                  <i class="bi bi-plus-lg"></i> <span>Thêm</span>
+                </a>
+                <!-- Modal Thêm mới bất động sản -->
+                <div class="modal fade" id="addPropertyModal" tabindex="-1" aria-labelledby="addPropertyModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <form th:action="@{/properties/createProperty}" th:object="${property}" method="post" onsubmit="return validateForm();">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="addPropertyModalLabel"><i class="bi bi-plus"></i> Thêm mới bất động sản</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row mb-3">
+                            <!-- Property Code -->
+                            <div class="col-md-6">
+                              <label for="propertyCode" class="form-label">Mã bất động sản <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" id="propertyCode" th:field="*{propertyCode}" required>
+                              <div th:errors="*{propertyCode}" class="text-danger"></div>
+                            </div>
+                            <!-- Address -->
+                            <div class="col-md-6">
+                              <label for="address" class="form-label">Địa chỉ <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" id="address" th:field="*{address}" required>
+                              <div th:errors="*{address}" class="text-danger"></div>
+                            </div>
+                          </div>
+                          <!-- City, State, Postal Code -->
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label for="city" class="form-label">Tỉnh/Thành phố <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" id="city" th:field="*{city}" required>
+                              <div th:errors="*{city}" class="text-danger"></div>
+                            </div>
+                            <div class="col-md-4">
+                              <label for="state" class="form-label">Quận/Huyện <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" id="state" th:field="*{state}" required>
+                              <div th:errors="*{state}" class="text-danger"></div>
+                            </div>
+                            <div class="col-md-4">
+                              <label for="postalCode" class="form-label">Mã bưu điện</label>
+                              <input type="text" class="form-control" id="postalCode" th:field="*{postalCode}">
+                            </div>
+                          </div>
+                          <!-- Price, Area -->
+                          <div class="row mb-3">
+                            <div class="col-md-6">
+                              <label for="price" class="form-label">Giá (VNĐ) <span class="text-danger">*</span></label>
+                              <input type="number" class="form-control" id="price" th:field="*{price}" step="0.01" required>
+                              <div th:errors="*{price}" class="text-danger"></div>
+                            </div>
+                            <div class="col-md-6">
+                              <label for="area" class="form-label">Diện tích (m²) <span class="text-danger">*</span></label>
+                              <input type="number" class="form-control" id="area" th:field="*{area}" step="0.01" required>
+                              <div th:errors="*{area}" class="text-danger"></div>
+                            </div>
+                          </div>
+                          <!-- Bedrooms, Bathrooms, Floors -->
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label for="bedrooms" class="form-label">Số phòng ngủ</label>
+                              <input type="number" class="form-control" id="bedrooms" th:field="*{bedrooms}" min="0">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="bathrooms" class="form-label">Số phòng tắm</label>
+                              <input type="number" class="form-control" id="bathrooms" th:field="*{bathrooms}" min="0">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="floors" class="form-label">Số tầng</label>
+                              <input type="number" class="form-control" id="floors" th:field="*{floors}" min="0">
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <!-- Property Type -->
+                            <div class="col-md-4">
+                              <label for="propertyType" class="form-label">Loại bất động sản <span class="text-danger">*</span></label>
+                              <select class="form-select" id="propertyType" th:field="*{propertyType.typeId}" required>
+                                <option value="">Chọn loại bất động sản</option>
+                                <th:block th:each="type : ${propertyTypes}">
+                                  <option th:value="${type.typeId}" th:text="${type.typeName}"></option>
+                                </th:block>
+                              </select>
+                              <div th:errors="*{propertyType.typeId}" class="text-danger"></div>
+                            </div>
+                            <!-- Project -->
+                            <div class="col-md-4">
+                              <label for="project" class="form-label">Dự án</label>
+                              <select class="form-select" id="project" th:field="*{project.projectId}">
+                                <option value="">Không thuộc dự án</option>
+                                <th:block th:each="proj : ${projects}">
+                                  <option th:value="${proj.id}" th:text="${proj.projectName}"></option>
+                                </th:block>
+                              </select>
+                            </div>
+                            <!-- Is Furnished -->
+                            <div class="col-md-4">
+                              <label class="form-label">Nội thất</label>
+                              <div class="d-flex">
+                                <div class="form-check">
+                                  <input class="form-check-input" type="radio" id="isFurnishedTrue" th:field="*{isFurnished}" th:value="true" required>
+                                  <label class="form-check-label" for="isFurnishedTrue">Có</label>
+                                </div>
+                                <div class="form-check ms-2">
+                                  <input class="form-check-input" type="radio" id="isFurnishedFalse" th:field="*{isFurnished}" th:value="false" required>
+                                  <label class="form-check-label" for="isFurnishedFalse">Không</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <!-- Year Built -->
+                            <div class="col-md-6">
+                              <label for="yearBuilt" class="form-label">Năm xây dựng</label>
+                              <input type="date" class="form-control" id="yearBuilt" th:field="*{yearBuilt}">
+                            </div>
+                            <!-- Listing Type -->
+                            <div class="col-md-6">
+                              <label for="listingType" class="form-label">Loại giao dịch <span class="text-danger">*</span></label>
+                              <select class="form-select" id="listingType" th:field="*{listingType}" required>
+                                <option value="">Chọn loại giao dịch</option>
+                                <option value="Bán">Bán</option>
+                                <option value="Cho thuê">Cho thuê</option>
+                              </select>
+                              <div th:errors="*{listingType}" class="text-danger"></div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <!-- Owner -->
+                            <div class="col-md-6">
+                              <label for="owner" class="form-label">Chủ sở hữu</label>
+                              <select class="form-select" id="owner" th:field="*{owner.customerId}">
+                                <option value="">Không có chủ sở hữu</option>
+                                <th:block th:each="cust : ${owners}">
+                                  <option th:value="${cust.customerId}" th:text="${cust.firstName} + ' ' + ${cust.lastName}"></option>
+                                </th:block>
+                              </select>
+                            </div>
+                            <!-- Listing Agent -->
+                            <div class="col-md-6">
+                              <label for="listingAgent" class="form-label">Nhân viên phụ trách <span class="text-danger">*</span></label>
+                              <select class="form-select" id="listingAgent" th:field="*{listingAgent.employeeId}" required>
+                                <option value="">Chọn nhân viên</option>
+                                <th:block th:each="emp : ${listingAgents}">
+                                  <option th:value="${emp.employeeId}" th:text="${emp.firstName} + ' ' + ${emp.lastName}"></option>
+                                </th:block>
+                              </select>
+                              <div th:errors="*{listingAgent.employeeId}" class="text-danger"></div>
+                            </div>
+                          </div>
+
+                          <!-- Title -->
+                          <div class="mb-3">
+                            <label for="title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                            <div th:errors="*{title}" class="text-danger"></div>
+                          </div>
+                          <!-- Description -->
+                          <div class="mb-3">
+                            <label for="description" class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="description" th:field="*{description}" rows="4"></textarea>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                          <button type="submit" class="btn btn-success" onclick="return confirm('Bạn có chắc chắn muốn thêm bất động sản này không?')">Thêm</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Dropdown Nhập -->
+                <div class="dropdown ms-1">
+                  <a href="#" class="btn btn-success" data-bs-toggle="dropdown">
+                    <i class="bi bi-file-earmark-arrow-up"></i> <span>Nhập</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importExcelModal">
+                        <span>Excel</span>
+                      </a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importQRModal">
+                        <span>QR Code</span>
+                      </a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importPDFModal">
+                        <span>PDF</span>
+                      </a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                      <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#importAIModal">
+                        <span>AI</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="dropdown ms-1">
+                  <a th:href="@{#}" class="btn btn-success" data-bs-toggle="dropdown">
+                    <i class="bi bi-file-earmark-arrow-down"></i> <span>Xuất</span>
+                  </a>
+
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a th:href="@{/properties/export/excel}" class="dropdown-item btn btn-success text-center">
+                        <span>Excel</span>
+                      </a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                      <a th:href="@{/properties/export/pdf}" class="dropdown-item btn btn-success text-center">
+                        <span>PDF</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Modal Tải lên Excel -->
+                <div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="importExcelModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form th:action="@{/properties/importExcel}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="sourcePage" value="for-rent">
+                        <input type="hidden" name="action" id="formActionExcel" value="create">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="importExcelModalLabel">
+                            <i class="bi bi-file-earmark-excel"></i> Tải lên danh sách bất động sản từ Excel
+                          </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                        </div>
+
+                        <div class="modal-body">
+                          <!-- Hướng dẫn -->
+                          <div class="alert alert-primary text-dark">
+                            <div class="d-flex align-items-center">
+                              <i class="bi bi-exclamation-circle-fill text-info fs-4 me-2"></i>
+                              <strong class="mb-0">Lưu ý khi tải lên</strong>
+                            </div>
+                            <ul class="list-unstyled mt-2 mb-0 ms-3 small">
+                              <li>File Excel phải đúng định dạng như mẫu</li>
+                              <li>Mã bất động sản (propertyCode) và tiêu đề (title) không được để trống</li>
+                              <li>Giá (price) phải lớn hơn 1.000đ</li>
+                              <li>Chọn "Thêm mới" để tạo bất động sản mới hoặc "Cập nhật" để chỉnh sửa bất động sản hiện có</li>
+                            </ul>
+                          </div>
+
+                          <!-- Tải file mẫu -->
+                          <div class="mb-3 text-center">
+                            <a th:href="@{/assets/import/mau.xlsx}" class="btn btn-success" download>
+                              <i class="bi bi-cloud-arrow-down"></i> Tải xuống file mẫu Excel
+                            </a>
+                          </div>
+
+                          <!-- Chọn file Excel -->
+                          <div id="dropArea" class="mb-3 text-center border border-2 border-secondary rounded p-4" style="cursor: pointer;">
+                            <input type="file" class="form-control d-none" id="excelFile" name="file" accept=".xlsx,.xls" required>
+                            <i class="bi bi-upload fs-2 text-primary"></i>
+                            <p class="mt-2 mb-0">Kéo thả hoặc nhấn để chọn file Excel</p>
+                            <small class="text-muted">Chỉ hỗ trợ tải lên file Excel (.xlsx, .xls)</small>
+                          </div>
+
+                          <!-- Hiển thị tên file + nút xóa -->
+                          <div id="fileInfoContainer" hidden class="mt-2 d-flex justify-content-between align-items-center text-success fw-semibold" style="font-size: 14px;">
+                            <div id="fileName" class="d-flex align-items-center text-dark">
+                              <i id="fileIcon" class="bi bi-link-45deg me-2" hidden></i>
+                              <span id="fileNameText"></span>
+                            </div>
+                            <button id="removeFileBtn" type="button" class="btn btn-sm btn-none border-0 bg-small ms-2" title="Xóa file" hidden>
+                              <i class="bi bi-trash-fill"></i>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                          <button type="submit" class="btn btn-primary" onclick="document.getElementById('formActionExcel').value='update'">
+                            <i class="bi bi-cloud-arrow-up"></i> Cập nhật
+                          </button>
+                          <button type="submit" class="btn btn-primary" onclick="document.getElementById('formActionExcel').value='create'">
+                            <i class="bi bi-cloud-arrow-up"></i> Thêm mới
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal Nhập từ QR Code -->
+                <div class="modal fade" id="importQRModal" tabindex="-1" aria-labelledby="importQRModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form th:action="@{/properties/importQR}" method="post" enctype="multipart/form-data" id="qrForm">
+                        <input type="hidden" name="sourcePage" value="for-rent">
+                        <input type="hidden" name="action" id="formActionQR" value="create"> <!-- Thêm trường action -->
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="importQRModalLabel"><i class="bi bi-qr-code"></i> Tải danh sách bất động sản từ mã QR</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Quét mã QR -->
+                          <div class="text-center mb-3" id="cameraSection">
+                            <h4 class="form-label">Quét mã QR bằng Camera</h4>
+                            <div id="qr-reader"></div>
+                            <div id="qr-reader-result" class="mt-2" th:text="${param.errorMessage ?: 'Đưa mã QR vào khung chấm sáng để quét.'}"></div>
+                            <input type="hidden" name="qrContent" id="qrContent">
+                          </div>
+                          <!-- Upload hình ảnh QR -->
+                          <div class="alert alert-primary text-dark">
+                            <div class="d-flex align-items-center">
+                              <i class="bi bi-exclamation-circle-fill text-info fs-4 me-2"></i>
+                              <strong class="mb-0">Lưu ý khi tải lên</strong>
+                            </div>
+                            <ul class="list-unstyled mt-2 mb-0 ms-3 small">
+                              <li>Ảnh mã QR phải rõ nét, không bị mờ hoặc mất góc</li>
+                              <li>Chỉ chấp nhận định dạng hình ảnh (JPG, PNG, BMP,...)</li>
+                              <li>Chọn "Thêm mới" để tạo bất động sản mới hoặc "Cập nhật" để chỉnh sửa bất động sản hiện có</li>
+                            </ul>
+                          </div>
+
+                          <!-- Tải tất cả ảnh mẫu QR -->
+                          <div class="mb-3 text-center">
+                            <a th:href="@{/assets/import/mau.zip}" class="btn btn-success" download>
+                              <i class="bi bi-download"></i> Tải xuống file mẫu QR
+                            </a>
+                          </div>
+
+                          <div class="mb-2 text-center">
+                            <div id="qrDropArea" class="text-center border border-2 border-secondary rounded p-4" style="cursor: pointer;">
+                              <input type="file" class="form-control d-none" id="qrFileUpload" name="file" accept="image/*">
+                              <i class="bi bi-upload fs-2 text-primary"></i>
+                              <p class="mt-2 mb-0">Kéo thả hoặc nhấn để chọn hình ảnh</p>
+                              <small class="text-muted">Chỉ hỗ trợ file ảnh (PNG, JPG, BMP,...)</small>
+                            </div>
+                            <div id="qrFileInfoContainer" hidden class="mt-2 d-flex justify-content-between align-items-center text-success fw-semibold" style="font-size: 14px;">
+                              <div class="d-flex align-items-center text-dark">
+                                <i class="bi bi-image me-2" hidden></i>
+                                <span id="qrFileNameText"></span>
+                              </div>
+                              <button id="qrRemoveFileBtn" type="button" class="btn btn-sm btn-none border-0 bg-small ms-2" title="Xóa file" hidden>
+                                <i class="bi bi-trash-fill"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                          <button type="submit" class="btn btn-primary" onclick="document.getElementById('formActionQR').value='update'">
+                            <i class="bi bi-cloud-arrow-up"></i> Cập nhật
+                          </button>
+                          <button type="submit" class="btn btn-primary" id="submitBtn" onclick="document.getElementById('formActionQR').value='create'">
+                            <i class="bi bi-cloud-arrow-up"></i> Thêm mới
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal Nhập từ PDF -->
+                <div class="modal fade" id="importPDFModal" tabindex="-1" aria-labelledby="importPDFModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form th:action="@{/properties/importPDF}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="sourcePage" value="for-rent">
+                        <input type="hidden" name="action" id="formAction" value="create">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="importPDFModalLabel">
+                            <i class="bi bi-file-earmark-pdf"></i> Tải lên danh sách bất động sản từ PDF
+                          </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                        </div>
+
+                        <div class="modal-body">
+                          <!-- Hướng dẫn -->
+                          <div class="alert alert-primary text-dark">
+                            <div class="d-flex align-items-center">
+                              <i class="bi bi-exclamation-circle-fill text-info fs-4 me-2"></i>
+                              <strong class="mb-0">Lưu ý khi tải lên</strong>
+                            </div>
+                            <ul class="list-unstyled mt-2 mb-0 ms-3 small">
+                              <li>File PDF phải đúng định dạng như mẫu</li>
+                              <li>Mã bất động sản (propertyCode) và tiêu đề (title) không được để trống</li>
+                              <li>Giá (price) phải lớn hơn 1.000đ</li>
+                              <li>Chọn "Thêm mới" để tạo bất động sản mới hoặc "Cập nhật" để chỉnh sửa bất động sản hiện có</li>
+                            </ul>
+                          </div>
+
+                          <!-- Tải file mẫu -->
+                          <div class="mb-3 text-center">
+                            <a th:href="@{/assets/import/mau.pdf}" class="btn btn-success" download>
+                              <i class="bi bi-cloud-arrow-down"></i> Tải xuống file mẫu PDF
+                            </a>
+                          </div>
+
+                          <!-- Chọn file PDF -->
+                          <div id="pdfDropArea" class="mb-3 text-center border border-2 border-secondary rounded p-4" style="cursor: pointer;">
+                            <input type="file" class="form-control d-none" id="pdfFile" name="file" accept=".pdf" required>
+                            <i class="bi bi-upload fs-2 text-primary"></i>
+                            <p class="mt-2 mb-0">Kéo thả hoặc nhấn để chọn file PDF</p>
+                            <small class="text-muted">Chỉ hỗ trợ tải lên file PDF (.pdf)</small>
+                          </div>
+
+                          <!-- Hiển thị tên file + nút xóa -->
+                          <div id="pdfFileInfoContainer" hidden class="mt-2 d-flex justify-content-between align-items-center text-success fw-semibold" style="font-size: 14px;">
+                            <div id="pdfFileName" class="d-flex align-items-center text-dark">
+                              <i id="pdfFileIcon" class="bi bi-file-earmark-pdf-fill me-2" hidden></i>
+                              <span id="pdfFileNameText"></span>
+                            </div>
+                            <button id="pdfRemoveFileBtn" type="button" class="btn btn-sm btn-none border-0 bg-small ms-2" title="Xóa file" hidden>
+                              <i class="bi bi-trash-fill"></i>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                          <button type="submit" class="btn btn-primary" onclick="document.getElementById('formAction').value='update'">
+                            <i class="bi bi-cloud-arrow-up"></i> Cập nhật
+                          </button>
+                          <button type="submit" class="btn btn-primary" onclick="document.getElementById('formAction').value='create'">
+                            <i class="bi bi-cloud-arrow-up"></i> Thêm mới
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal Tải lên bằng AI -->
+                <div class="modal fade" id="importAIModal" tabindex="-1" aria-labelledby="importAIModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form th:action="@{/properties/importAI}" method="post">
+                        <input type="hidden" name="sourcePage" value="for-rent">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="importAIModalLabel">
+                            <i class="bi bi-robot"></i> Tạo bất động sản tự động bằng AI
+                          </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Hướng dẫn -->
+                          <div class="alert alert-primary text-dark">
+                            <div class="d-flex align-items-center">
+                              <i class="bi bi-exclamation-circle-fill text-info fs-4 me-2"></i>
+                              <strong class="mb-0">Hướng dẫn sử dụng</strong>
+                            </div>
+                            <ul class="list-unstyled mt-2 mb-0 ms-3 small">
+                              <li>Nhập số lượng bất động sản muốn tạo tự động.</li>
+                              <li>Dữ liệu sẽ được sinh ngẫu nhiên theo định dạng hợp lệ.</li>
+                              <li>Chỉ hỗ trợ thêm mới bất động sản.</li>
+                              <li>Giới hạn tạo 100 bất động sản.</li>
+                            </ul>
+                          </div>
+                          <!-- Nhập số lượng -->
+                          <div class="mb-1">
+                            <label for="quantity" class="form-label">Số lượng bất động sản:</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="100" required>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                          <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-cloud-arrow-up"></i> Thêm
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Table with stripped rows -->
+            <div th:if="${properties != null and !properties.isEmpty()}">
+              <!-- Table with stripped rows -->
+              <table class="table datatable">
+                <thead>
+                <tr>
+                  <th>BĐS</th>
+                  <th>Thông tin</th>
+                  <th>Giá</th>
+                  <th>Diện tích</th>
+                  <th>Địa chỉ</th>
+                  <th>Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="property : ${properties}">
+                  <td th:text="${property.title}" class="align-middle w-25"></td>
+                  <td>
+                    <span th:text="${property.bedrooms} + ' phòng ngủ'"></span><br>
+                    <span th:text="${property.bathrooms} + ' phòng tắm'"></span>
+                  </td>
+                  <td class="align-middle" th:utext="${property.price} + ' VNĐ'"></td>
+                  <td class="align-middle" th:utext="${property.area} + ' m²'"></td>
+                  <td class="align-middle w-25">
+                    <span th:text="${property.address}"></span>,
+                    <span th:text="${property.city}"></span>,
+                    <span th:text="${property.state}"></span>
+                  </td>
+                  <td class="align-middle" style="width: 10rem;">
+                    <a th:href="@{/properties/detail/{id}(id=${property.propertyId})}" class="btn btn-primary btn-sm">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                    <a th:href="@{/properties/edit/{id}(id=${property.propertyId})}" class="btn btn-secondary btn-sm">
+                      <i class="bi bi-pen"></i>
+                    </a>
+                    <!-- Nút xóa để mở modal -->
+                    <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-${property.propertyId}">
+                      <i class="bi bi-trash"></i>
+                    </a>
+                    <!-- Modal xác nhận xóa -->
+                    <div class="modal fade" id="confirmDeleteModal-${property.propertyId}" tabindex="-1" aria-labelledby="confirmDeleteLabel-${property.propertyId}" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <form th:action="@{/properties/delete/{id}(id=${property.propertyId})}" method="post">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="confirmDeleteLabel-${property.propertyId}">Xác nhận xóa</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                            </div>
+                            <div class="modal-body">
+                              Bạn có chắc chắn muốn xóa bất động sản này không?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                              <button type="submit" class="btn btn-danger">Xóa</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <a th:href="@{/properties/copy/{id}(id=${property.propertyId})}" class="btn btn-info btn-sm">
+                      <i class="bi bi-copy"></i>
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+            </div>
+            <div th:if="${properties == null or properties.isEmpty()}" class="alert alert-info text-center">
+              Không có bất động sản nào để bán.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="copyright">
+    © Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+  </div>
+  <div class="credits">
+    <!-- All the links in the footer should remain intact. -->
+    <!-- You can delete the links only if you purchased the pro version. -->
+    <!-- Licensing information: https://bootstrapmade.com/license/ -->
+    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+    Designed by <a th:href="@{https://bootstrapmade.com/}">BootstrapMade</a>
+  </div>
+</footer><!-- End Footer -->
+
+<a th:href="@{#}" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<!-- Thêm thư viện html5-qrcode từ CDN phiên bản mới -->
+<script th:src="@{https://unpkg.com/html5-qrcode@1.2.4/minified/html5-qrcode.min.js}" defer></script>
+<script defer>
+  console.log('Bắt đầu chạy JavaScript');
+
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded');
+
+    const modal = document.getElementById('importQRModal');
+    if (!modal) {
+      console.error('Không tìm thấy modal importQRModal');
+      return;
+    }
+
+    modal.addEventListener('shown.bs.modal', () => {
+      console.log('Modal đã hiển thị');
+
+      if (typeof Html5Qrcode === 'undefined') {
+        document.getElementById('qr-reader-result').innerText = 'Lỗi: Không thể tải thư viện quét QR. Vui lòng kiểm tra kết nối mạng.';
+        console.error('Html5Qrcode not defined');
+        return;
+      }
+
+      const html5QrCode = new Html5Qrcode('qr-reader');
+      const qrReaderResult = document.getElementById('qr-reader-result');
+      const submitBtn = document.getElementById('submitBtn'); // Nút "Thêm mới"
+      const updateBtn = document.querySelector('button[onclick*="update"]'); // Nút "Cập nhật"
+      const qrFileInput = document.getElementById('qrFileUpload');
+      const qrFileInfoContainer = document.getElementById('qrFileInfoContainer');
+      const qrFileNameText = document.getElementById('qrFileNameText');
+      const qrRemoveFileBtn = document.getElementById('qrRemoveFileBtn');
+      const qrFileIcon = document.querySelector('#qrFileInfoContainer .bi-image');
+
+      if (!qrReaderResult || !submitBtn || !updateBtn || !qrFileInput || !qrFileInfoContainer || !qrFileNameText || !qrRemoveFileBtn || !qrFileIcon) {
+        console.error('Không tìm thấy các phần tử cần thiết trong modal importQRModal');
+        return;
+      }
+
+      function showQRFileInfo(fileName) {
+        qrFileNameText.textContent = fileName;
+        qrFileInfoContainer.hidden = false;
+        qrFileIcon.hidden = false;
+        qrRemoveFileBtn.hidden = false;
+      }
+
+      function updateSubmitButtons() {
+        const hasFile = qrFileInput.files.length > 0;
+        const hasQRContent = document.getElementById('qrContent').value.trim() !== '';
+        submitBtn.disabled = !hasFile && !hasQRContent;
+        updateBtn.disabled = !hasFile && !hasQRContent;
+      }
+
+      document.getElementById('qrContent').addEventListener('change', updateSubmitButtons);
+      qrFileInput.addEventListener('change', () => {
+        const file = qrFileInput.files[0];
+        if (file) {
+          showQRFileInfo(file.name);
+        }
+        updateSubmitButtons();
+      });
+
+      const qrDropArea = document.getElementById('qrDropArea');
+      qrDropArea.addEventListener('click', () => qrFileInput.click());
+
+      qrDropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        qrDropArea.classList.add('border-primary', 'bg-light');
+      });
+
+      qrDropArea.addEventListener('dragleave', () => {
+        qrDropArea.classList.remove('border-primary', 'bg-light');
+      });
+
+      qrDropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        qrDropArea.classList.remove('border-primary', 'bg-light');
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          qrFileInput.files = files;
+          showQRFileInfo(files[0].name);
+          updateSubmitButtons();
+        }
+      });
+
+      qrRemoveFileBtn.addEventListener('click', () => {
+        qrFileInput.value = '';
+        qrFileNameText.textContent = '';
+        qrFileInfoContainer.hidden = true;
+        qrFileIcon.hidden = true;
+        qrRemoveFileBtn.hidden = true;
+        updateSubmitButtons();
+      });
+
+      let isScanning = false;
+      Html5Qrcode.getCameras().then(devices => {
+        console.log('Danh sách camera:', devices);
+        if (devices && devices.length) {
+          const defaultCameraId = devices[0].id;
+
+          html5QrCode.start(
+            defaultCameraId,
+            {
+              fps: 30,
+              qrbox: { width: 300, height: 300 },
+              aspectRatio: 1.0,
+              experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true
+              }
+            },
+            (decodedText) => {
+              document.getElementById('qrContent').value = decodedText;
+              document.getElementById('qrContent').dispatchEvent(new Event('change'));
+              qrReaderResult.innerText = 'Đã quét thành công';
+              console.log('Đã quét thành công');
+            },
+            (errorMessage) => {
+              console.error('Lỗi quét:', errorMessage);
+            }
+          ).then(() => {
+            isScanning = true;
+            qrReaderResult.innerText = 'Camera đã bật. Đưa mã QR vào khung để quét.';
+            console.log('Camera đã bật');
+          }).catch(err => {
+            qrReaderResult.innerText = 'Không thể khởi động camera: ' + err;
+            console.error('Lỗi khởi động camera:', err);
+          });
+        } else {
+          qrReaderResult.innerText = 'Không tìm thấy camera trên thiết bị.';
+          console.error('Không tìm thấy camera');
+        }
+      }).catch(err => {
+        qrReaderResult.innerText = 'Lỗi khi lấy danh sách camera: ' + err;
+        console.error('Lỗi lấy danh sách camera:', err);
+      });
+
+      modal.addEventListener('hidden.bs.modal', () => {
+        if (isScanning) {
+          html5QrCode.stop().then(() => {
+            isScanning = false;
+            console.log('Camera đã tắt khi đóng modal');
+          }).catch(err => {
+            console.error('Lỗi tắt camera khi đóng modal:', err);
+          });
+        }
+      });
+    });
+  });
+
+  // Xử lý modal importExcelModal
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded');
+
+    const dropArea = document.getElementById('dropArea');
+    const excelInput = document.getElementById('excelFile');
+    const fileInfoContainer = document.getElementById('fileInfoContainer');
+    const fileNameText = document.getElementById('fileNameText');
+    const removeFileBtn = document.getElementById('removeFileBtn');
+    const fileIcon = document.getElementById('fileIcon');
+
+    if (!dropArea || !excelInput || !fileInfoContainer || !fileNameText || !removeFileBtn || !fileIcon) {
+      console.error('Không tìm thấy các phần tử cần thiết trong modal importExcelModal');
+      return;
+    }
+
+    function showFileInfo(fileName) {
+      fileNameText.textContent = fileName;
+      fileInfoContainer.hidden = false;
+      fileIcon.hidden = false;
+      removeFileBtn.hidden = false;
+    }
+
+    dropArea.addEventListener('click', () => excelInput.click());
+
+    excelInput.addEventListener('change', () => {
+      const file = excelInput.files[0];
+      if (file) {
+        showFileInfo(file.name);
+      }
+    });
+
+    dropArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropArea.classList.add('border-primary', 'bg-light');
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+      dropArea.classList.remove('border-primary', 'bg-light');
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropArea.classList.remove('border-primary', 'bg-light');
+
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        excelInput.files = files;
+        showFileInfo(files[0].name);
+      }
+    });
+
+    removeFileBtn.addEventListener('click', () => {
+      excelInput.value = '';
+      fileNameText.textContent = '';
+      fileInfoContainer.hidden = true;
+      fileIcon.hidden = true;
+      removeFileBtn.hidden = true;
+    });
+  });
+
+  // Xử lý modal importPDFModal
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded');
+
+    const pdfDropArea = document.getElementById('pdfDropArea');
+    const pdfInput = document.getElementById('pdfFile');
+    const pdfFileInfoContainer = document.getElementById('pdfFileInfoContainer');
+    const pdfFileNameText = document.getElementById('pdfFileNameText');
+    const pdfRemoveFileBtn = document.getElementById('pdfRemoveFileBtn');
+    const pdfFileIcon = document.getElementById('pdfFileIcon');
+
+    if (!pdfDropArea || !pdfInput || !pdfFileInfoContainer || !pdfFileNameText || !pdfRemoveFileBtn || !pdfFileIcon) {
+      console.error('Không tìm thấy các phần tử cần thiết trong modal importPDFModal');
+      return;
+    }
+
+    function showPDFFileInfo(fileName) {
+      pdfFileNameText.textContent = fileName;
+      pdfFileInfoContainer.hidden = false;
+      pdfFileIcon.hidden = false;
+      pdfRemoveFileBtn.hidden = false;
+    }
+
+    pdfDropArea.addEventListener('click', () => pdfInput.click());
+
+    pdfInput.addEventListener('change', () => {
+      const file = pdfInput.files[0];
+      if (file) {
+        showPDFFileInfo(file.name);
+      }
+    });
+
+    pdfDropArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      pdfDropArea.classList.add('border-primary', 'bg-light');
+    });
+
+    pdfDropArea.addEventListener('dragleave', () => {
+      pdfDropArea.classList.remove('border-primary', 'bg-light');
+    });
+
+    pdfDropArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      pdfDropArea.classList.remove('border-primary', 'bg-light');
+
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        pdfInput.files = files;
+        showPDFFileInfo(files[0].name);
+      }
+    });
+
+    pdfRemoveFileBtn.addEventListener('click', () => {
+      pdfInput.value = '';
+      pdfFileNameText.textContent = '';
+      pdfFileInfoContainer.hidden = true;
+      pdfFileIcon.hidden = true;
+      pdfRemoveFileBtn.hidden = true;
+    });
+  });
+
+  // Xử lý modal importAIModal
+  document.addEventListener('DOMContentLoaded', () => {
+  const aiForm = document.querySelector('#importAIModal form');
+  if (aiForm) {
+    aiForm.addEventListener('submit', (e) => {
+      const quantity = document.getElementById('quantity').value;
+      if (quantity < 1 || quantity > 100) {
+        e.preventDefault();
+        alert('Vui lòng nhập số lượng từ 1 đến 100.');
+      }
+    });
+  }
+});
+
+  function validateForm() {
+    const propertyCode = document.getElementById("propertyCode");
+    const propertyType = document.getElementById("propertyType");
+    const project = document.getElementById("project");
+    const title = document.getElementById("title");
+    const description = document.getElementById("description");
+    const address = document.getElementById("address");
+    const city = document.getElementById("city");
+    const state = document.getElementById("state");
+    const postalCode = document.getElementById("postalCode");
+    const price = document.getElementById("price");
+    const area = document.getElementById("area");
+    const bedrooms = document.getElementById("bedrooms");
+    const bathrooms = document.getElementById("bathrooms");
+    const floors = document.getElementById("floors");
+    const listingAgent = document.getElementById("listingAgent");
+    const owner = document.getElementById("owner");
+    const yearBuilt = document.getElementById("yearBuilt");
+    const listingType = document.getElementById("listingType");
+    const furnishedTrue = document.getElementById("isFurnishedTrue");
+    const furnishedFalse = document.getElementById("isFurnishedFalse");
+
+    if (propertyCode.value.trim() === "") {
+      alert("Vui lòng nhập mã bất động sản.");
+      propertyCode.scrollIntoView({ behavior: "smooth", block: "center" });
+      propertyCode.focus();
+      return false;
+    }
+
+    if (propertyType.value.trim() === "") {
+      alert("Vui lòng chọn loại bất động sản.");
+      propertyType.scrollIntoView({ behavior: "smooth", block: "center" });
+      propertyType.focus();
+      return false;
+    }
+
+    if (title.value.trim() === "") {
+      alert("Vui lòng nhập tiêu đề bất động sản.");
+      title.scrollIntoView({ behavior: "smooth", block: "center" });
+      title.focus();
+      return false;
+    }
+
+    if (description.value.trim() === "") {
+      alert("Vui lòng nhập mô tả bất động sản.");
+      description.scrollIntoView({ behavior: "smooth", block: "center" });
+      description.focus();
+      return false;
+    }
+
+    if (address.value.trim() === "") {
+      alert("Vui lòng nhập địa chỉ bất động sản.");
+      address.scrollIntoView({ behavior: "smooth", block: "center" });
+      address.focus();
+      return false;
+    }
+
+    if (city.value.trim() === "") {
+      alert("Vui lòng nhập tỉnh/thành phố.");
+      city.scrollIntoView({ behavior: "smooth", block: "center" });
+      city.focus();
+      return false;
+    }
+
+    if (state.value.trim() === "") {
+      alert("Vui lòng nhập quận/huyện.");
+      state.scrollIntoView({ behavior: "smooth", block: "center" });
+      state.focus();
+      return false;
+    }
+
+    if (price.value.trim() === "") {
+      alert("Vui lòng nhập giá bất động sản.");
+      price.scrollIntoView({ behavior: "smooth", block: "center" });
+      price.focus();
+      return false;
+    } else if (isNaN(price.value) || parseFloat(price.value) < 0) {
+      alert("Giá bất động sản phải là số dương.");
+      price.scrollIntoView({ behavior: "smooth", block: "center" });
+      price.focus();
+      return false;
+    }
+
+    if (area.value.trim() === "") {
+      alert("Vui lòng nhập diện tích bất động sản.");
+      area.scrollIntoView({ behavior: "smooth", block: "center" });
+      area.focus();
+      return false;
+    } else if (isNaN(area.value) || parseFloat(area.value) <= 0) {
+      alert("Diện tích bất động sản phải là số dương.");
+      area.scrollIntoView({ behavior: "smooth", block: "center" });
+      area.focus();
+      return false;
+    }
+
+    if (bedrooms.value.trim() !== "" && (isNaN(bedrooms.value) || parseInt(bedrooms.value) < 0)) {
+      alert("Số phòng ngủ không được nhỏ hơn 0.");
+      bedrooms.scrollIntoView({ behavior: "smooth", block: "center" });
+      bedrooms.focus();
+      return false;
+    }
+
+    if (bathrooms.value.trim() !== "" && (isNaN(bathrooms.value) || parseInt(bathrooms.value) < 0)) {
+      alert("Số phòng tắm không được nhỏ hơn 0.");
+      bathrooms.scrollIntoView({ behavior: "smooth", block: "center" });
+      bathrooms.focus();
+      return false;
+    }
+
+    if (floors.value.trim() !== "" && (isNaN(floors.value) || parseInt(floors.value) < 0 || parseInt(floors.value) > 127)) {
+      alert("Số tầng phải từ 0 đến 127.");
+      floors.scrollIntoView({ behavior: "smooth", block: "center" });
+      floors.focus();
+      return false;
+    }
+
+    if (listingAgent.value.trim() === "") {
+      alert("Vui lòng chọn nhân viên bất động sản.");
+      listingAgent.scrollIntoView({ behavior: "smooth", block: "center" });
+      listingAgent.focus();
+      return false;
+    }
+
+    if (owner.value.trim() === "") {
+      alert("Vui lòng chọn chủ sở hữu.");
+      owner.scrollIntoView({ behavior: "smooth", block: "center" });
+      owner.focus();
+      return false;
+    }
+
+    // Kiểm tra năm xây dựng (phải là ngày hợp lệ và cách hiện tại ít nhất 1 năm)
+    if (yearBuilt.value.trim() === "") {
+      alert("Vui lòng nhập năm xây dựng.");
+      yearBuilt.scrollIntoView({ behavior: "smooth", block: "center" });
+      yearBuilt.focus();
+      return false;
+    }
+
+    const builtDate = new Date(yearBuilt.value);
+    const today = new Date();
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+    if (isNaN(builtDate.getTime())) {
+      alert("Năm xây dựng không hợp lệ.");
+      yearBuilt.scrollIntoView({ behavior: "smooth", block: "center" });
+      yearBuilt.focus();
+      return false;
+    }
+
+    if (builtDate > oneYearAgo) {
+      alert("Năm xây dựng phải cách hiện tại ít nhất 1 năm.");
+      yearBuilt.scrollIntoView({ behavior: "smooth", block: "center" });
+      yearBuilt.focus();
+      return false;
+    }
+
+    if (listingType.value.trim() === "") {
+      alert("Vui lòng chọn loại giao dịch.");
+      listingType.scrollIntoView({ behavior: "smooth", block: "center" });
+      listingType.focus();
+      return false;
+    }
+
+    if (!furnishedTrue.checked && !furnishedFalse.checked) {
+      alert("Vui lòng chọn thông tin nội thất.");
+      furnishedTrue.scrollIntoView({ behavior: "smooth", block: "center" });
+      return false;
+    }
+
+    return true;
+  }
+
+  function confirmDelete() {
+      return confirm("Bạn có chắc chắn muốn xóa bất động sản này không?");
+  }
+</script>
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>

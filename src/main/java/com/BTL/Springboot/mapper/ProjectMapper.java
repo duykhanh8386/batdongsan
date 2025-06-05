@@ -7,15 +7,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProjectMapper {
 
-    public ProjectDto toDto(Project project) {
+    public ProjectDto toDto(Project project){
         if (project == null) {
             return null;
         }
 
-        ProjectDto dto = new ProjectDto();
-        dto.setProjectId(project.getProjectId());
-        dto.setProjectName(project.getProjectName());
-        return dto;
+        ProjectDto projectDto = new ProjectDto();
+        projectDto.setId(project.getProjectId());
+        projectDto.setProjectName(project.getProjectName());
+        projectDto.setDeveloper(project.getDeveloper());
+        projectDto.setTotalArea(project.getTotalArea());
+        projectDto.setLocation(project.getLocation());
+        projectDto.setCity(project.getCity());
+        projectDto.setState(project.getState());
+        return projectDto;
     }
 
     public Project toEntity(ProjectDto dto) {
@@ -24,8 +29,13 @@ public class ProjectMapper {
         }
 
         Project project = new Project();
-        project.setProjectId(dto.getProjectId());
+        project.setProjectId(dto.getId());
         project.setProjectName(dto.getProjectName());
+        project.setDeveloper(dto.getDeveloper());
+        project.setTotalArea(dto.getTotalArea());
+        project.setLocation(dto.getLocation());
+        project.setCity(dto.getCity());
+        project.setState(dto.getState());
         return project;
     }
 }

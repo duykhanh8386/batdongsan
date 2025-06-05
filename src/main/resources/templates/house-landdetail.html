@@ -299,7 +299,7 @@
         </li>
         <li>
           <a th:href="@{/deleted-property/all}">
-            <i class="bi bi-circle"></i><span>Đã xóa</span>
+            <i class="bi bi-circle"></i><span>Thùng rác</span>
           </a>
         </li>
       </ul>
@@ -328,6 +328,11 @@
         <li>
           <a th:href="@{/project/houses}">
             <i class="bi bi-circle"></i><span>Nhà ở</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/project/trashs}">
+            <i class="bi bi-circle"></i><span>Thùng rác</span>
           </a>
         </li>
       </ul>
@@ -658,11 +663,11 @@
 
               <div class="col-sm-6">
                 <label for="project" class="form-label">Loại dự án <span class="text-danger" th:if="${isEditMode}">*</span></label>
-                <select class="form-control" id="project" th:field="*{project.projectId}" th:disabled="${!isEditMode}">
+                <select class="form-control" id="project" th:field="*{project.id}" th:disabled="${!isEditMode}">
                   <option value="">No Project</option>
-                  <option th:each="proj : ${projects}" th:value="${proj.projectId}" th:text="${proj.projectName}"></option>
+                  <option th:each="proj : ${projects}" th:value="${proj.id}" th:text="${proj.projectName}"></option>
                 </select>
-                <div th:errors="*{project.projectId}" class="text-danger"></div>
+                <div th:errors="*{project.id}" class="text-danger"></div>
               </div>
 
               <div class="col-sm-12">

@@ -1,4 +1,4 @@
-package com.BTL.Springboot.service.impl;
+package com.BTL.Springboot.service.Impl;
 
 import com.BTL.Springboot.dto.response.property.PropertyDto;
 import com.BTL.Springboot.dto.request.property.PropertyRequest;
@@ -168,21 +168,6 @@ public class PropertyServiceImpl implements PropertyService {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
     @Override
-    public PropertyDto getPropertyByCode(String propertyCode) {
-        Property property = propertyRepository.findByPropertyCode(propertyCode)
-                .orElseThrow(() -> new RuntimeException("Property not found"));
-        return propertyMapper.toDto(property);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
-    @Override
-    public List<PropertyDto> findAllByListingTypeAndStatusTrue(String listingType) {
-        List<Property> properties = propertyRepository.findAllByListingTypeAndStatusTrue(listingType);
-        return properties.stream().map(propertyMapper::toDto).collect(Collectors.toList());
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'DIRECTOR', 'DEPUTY_DIRECTOR')")
-    @Override
     public List<PropertyDto> findAllByListingTypeAndStatus(String listingType, String status) {
         List<Property> properties = propertyRepository.findAllByListingTypeAndStatus(listingType, status);
         return properties.stream().map(propertyMapper::toDto).collect(Collectors.toList());
@@ -222,5 +207,15 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepository.save(property);
         propertyTrashRepository.save(propertyTrashBin);
         log.info("Đã xóa mềm bất động sản với ID: {} và lưu vào bảng deleted_properties", id);
+    }
+
+    @Override
+    public List<Property> findByProjectId(int id) {
+        return propertyRepository.findByPropertyId(id);
+    }
+
+    @Override
+    public List<Property> getPropertyByProjectId(int id) {
+        return propertyRepository.findPropertiesByProjectId(id);
     }
 }

@@ -42,7 +42,12 @@ public class PropertyMapper {
         if (property.getProject() != null && property.getProject().getProjectId() != null) {
             dto.setProject(new ProjectDto(
                     property.getProject().getProjectId(),
-                    property.getProject().getProjectName()
+                    property.getProject().getProjectName(),
+                    property.getProject().getDeveloper(),
+                    property.getProject().getLocation(),
+                    property.getProject().getCity(),
+                    property.getProject().getState(),
+                    property.getProject().getTotalArea()
             ));
         } else {
             dto.setProject(null);
@@ -101,9 +106,9 @@ public class PropertyMapper {
         property.setUpdatedAt(dto.getUpdatedAt());
 
         // Ánh xạ Project
-        if (dto.getProject() != null && dto.getProject().getProjectId() != null) {
+        if (dto.getProject() != null && dto.getProject().getId() != null) {
             Project project = new Project();
-            project.setProjectId(dto.getProject().getProjectId());
+            project.setProjectId(dto.getProject().getId());
             property.setProject(project);
         } else {
             property.setProject(null);
@@ -213,9 +218,9 @@ public class PropertyMapper {
         request.setUpdatedAt(dto.getUpdatedAt());
 
         // Ánh xạ Project
-        if (dto.getProject() != null && dto.getProject().getProjectId() != null) {
+        if (dto.getProject() != null && dto.getProject().getId() != null) {
             Project project = new Project();
-            project.setProjectId(dto.getProject().getProjectId());
+            project.setProjectId(dto.getProject().getId());
             request.setProject(project);
         } else {
             request.setProject(null);

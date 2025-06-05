@@ -1,8 +1,6 @@
 package com.BTL.Springboot.controller;
 
-import com.BTL.Springboot.dto.response.project.ProjectDto;
 import com.BTL.Springboot.dto.response.property.PropertyDto;
-import com.BTL.Springboot.dto.response.property_type.PropertyTypeDto;
 import com.BTL.Springboot.dto.request.property.PropertyRequest;
 import com.BTL.Springboot.dto.response.user.UserAccountDto;
 import com.BTL.Springboot.entity.*;
@@ -14,11 +12,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 

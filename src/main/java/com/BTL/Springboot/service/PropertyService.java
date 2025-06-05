@@ -2,6 +2,7 @@ package com.BTL.Springboot.service;
 
 import com.BTL.Springboot.dto.response.property.PropertyDto;
 import com.BTL.Springboot.dto.request.property.PropertyRequest;
+import com.BTL.Springboot.entity.Property;
 
 import java.util.List;
 
@@ -12,12 +13,6 @@ public interface PropertyService {
 
     // Hàm lấy dữ liệu của properties theo propertyId
     PropertyDto getPropertyById(Integer id);
-
-    // Hàm lấy dữ liệu của properties theo propertyCode
-    PropertyDto getPropertyByCode(String propertyCode);
-
-    // Hàm lấy tất cả dữ liệu properties theo listingType và statusTrue
-    List<PropertyDto> findAllByListingTypeAndStatusTrue(String listingType);
 
     // Hàm lấy tất cả dữ liệu properties theo listingType và status
     List<PropertyDto> findAllByListingTypeAndStatus(String listingType, String status);
@@ -34,4 +29,8 @@ public interface PropertyService {
     boolean existsByPropertyCode(String propertyCode);
 
     void deleteProperty(Integer id);
+
+    List<Property> findByProjectId(int id);
+
+    List<Property> getPropertyByProjectId(int id);
 }

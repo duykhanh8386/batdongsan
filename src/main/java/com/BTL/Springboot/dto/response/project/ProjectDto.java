@@ -1,11 +1,18 @@
 package com.BTL.Springboot.dto.response.project;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProjectDto {
-    private Integer projectId;
+    private Integer id;
     private String projectName;
+    private String developer;
+    private String location;
+    private String city;
+    private String state;
+    private Double totalArea;
 }

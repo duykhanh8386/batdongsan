@@ -334,7 +334,7 @@
         </li>
         <li>
           <a th:href="@{/deleted-property/all}">
-            <i class="bi bi-circle"></i><span>Đã xóa</span>
+            <i class="bi bi-circle"></i><span>Thùng rác</span>
           </a>
         </li>
       </ul>
@@ -363,6 +363,11 @@
         <li>
           <a th:href="@{/project/houses}">
             <i class="bi bi-circle"></i><span>Nhà ở</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/project/trashs}">
+            <i class="bi bi-circle"></i><span>Thùng rác</span>
           </a>
         </li>
       </ul>
@@ -637,7 +642,7 @@
                               <select class="form-select" id="project" th:field="*{project.projectId}">
                                 <option value="">Không thuộc dự án</option>
                                 <th:block th:each="proj : ${projects}">
-                                  <option th:value="${proj.projectId}" th:text="${proj.projectName}"></option>
+                                  <option th:value="${proj.id}" th:text="${proj.projectName}"></option>
                                 </th:block>
                               </select>
                             </div>

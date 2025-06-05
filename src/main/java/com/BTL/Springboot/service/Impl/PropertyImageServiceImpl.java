@@ -1,4 +1,4 @@
-package com.BTL.Springboot.service.impl;
+package com.BTL.Springboot.service.Impl;
 
 import com.BTL.Springboot.entity.Property;
 import com.BTL.Springboot.entity.PropertyImage;

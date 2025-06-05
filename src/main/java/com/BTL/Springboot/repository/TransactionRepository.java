@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
+public interface TransactionRepository extends JpaRepository<Transaction,Integer> {
     @Modifying
     @Transactional
     @Query(value = """
@@ -29,4 +29,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     )
     """, nativeQuery = true)
     void restoreTransactionsByProject(@Param("projectId") Integer projectId);
+
 }

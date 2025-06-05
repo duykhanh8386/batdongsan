@@ -31,10 +31,6 @@ public interface PropertyRepository extends JpaRepository<Property, Integer> {
     // Hàm kiểm tra sự tồn tại của propertyCode
     boolean existsByPropertyCode(String propertyCode);
 
-    List<Property> findAllByStatus(String status);
-
-    List<Property> findAllByPropertyCodeIn(List<String> propertyCode);
-
     List<Property> findByPropertyId(Integer propertyId);
 
     @Query("SELECT p FROM Property p WHERE p.project.projectId = :projectId")
@@ -43,11 +39,11 @@ public interface PropertyRepository extends JpaRepository<Property, Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Property p SET p.status = 'false' WHERE p.project.projectId = :projectId")
+    @Query("UPDATE Property p SET p.status = 'true' WHERE p.project.projectId = :projectId")
     void softDeletePropertiesByProject(@Param("projectId") Integer projectId);
 
     @Modifying
     @Transactional
-    @Query("UPDATE Property p SET p.status = 'true' WHERE p.project.projectId = :projectId")
+    @Query("UPDATE Property p SET p.status = 'false' WHERE p.project.projectId = :projectId")
     void restorePropertiesByProject(@Param("projectId") Integer projectId);
 }

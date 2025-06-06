@@ -220,6 +220,12 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.11.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv-platform</artifactId>
+			<version>1.5.9</version> <!-- hoặc bản mới nhất -->
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

@@ -14,6 +14,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.opencv.global.opencv_imgcodecs;
+import org.bytedeco.opencv.global.opencv_imgproc;
+import org.bytedeco.opencv.opencv_core.Mat;
+import org.bytedeco.opencv.opencv_core.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -24,13 +29,17 @@ import technology.tabula.RectangularTextContainer;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -318,35 +327,33 @@ public class ProjectServiceImpl implements ProjectService {
     public Project parse(String text, PropertyType defaultType) {
         Project project = new Project();
 
-        // Chuẩn hóa lỗi OCR
-        text = correctCommonMistakes(text);
-
+        System.out.println(text);
         String[] lines = text.split("\\n");
 
         for (String line : lines) {
-            String lower = line.toLowerCase();
+            String lower = removeDiacritics(line.toLowerCase());
 
-            if (containsAny(lower, "tên", "dự án", "project name")) {
+            if (containsAny(lower, "ten du an", "project name")) {
                 project.setProjectName(extractValue(line));
-            } else if (containsAny(lower, "công ty", "chủ đầu tư", "developer")) {
+            } else if (containsAny(lower, "chu dau tu", "cong ty", "developer")) {
                 project.setDeveloper(extractValue(line));
-            } else if (containsAny(lower, "diện tích", "area")) {
+            } else if (containsAny(lower, "dien tich", "area")) {
                 project.setTotalArea(extractDouble(line));
-            } else if (containsAny(lower, "số lượng", "units")) {
+            } else if (containsAny(lower, "so luong", "can", "units")) {
                 project.setTotalUnits(extractInt(line));
-            } else if (containsAny(lower, "thành phố", "city")) {
+            } else if (containsAny(lower, "thanh pho", "city")) {
                 project.setCity(extractValue(line));
-            } else if (containsAny(lower, "tỉnh", "state")) {
+            } else if (containsAny(lower, "tinh", "state")) {
                 project.setState(extractValue(line));
-            } else if (containsAny(lower, "vị trí", "địa điểm", "location")) {
+            } else if (containsAny(lower, "vi tri", "dia diem", "location")) {
                 project.setLocation(extractValue(line));
-            } else if (containsAny(lower, "bắt đầu", "khởi công", "start date")) {
+            } else if (containsAny(lower, "bat dau", "khoi cong", "start date")) {
                 project.setStartDate(extractDate(line));
-            } else if (containsAny(lower, "hoàn thành", "completion")) {
+            } else if (containsAny(lower, "hoan thanh", "completion")) {
                 project.setCompletionDate(extractDate(line));
-            } else if (containsAny(lower, "trạng thái", "status")) {
+            } else if (containsAny(lower, "trang thai", "status")) {
                 project.setStatus(extractValue(line));
-            } else if (containsAny(lower, "mô tả", "giới thiệu", "description")) {
+            } else if (containsAny(lower, "mo ta", "m6 ta", "gioi thieu", "description")) {
                 project.setDescription(extractValue(line));
             }
         }
@@ -355,7 +362,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setCreatedAt(LocalDateTime.now());
         project.setUpdatedAt(LocalDateTime.now());
 
-        // Mặc định nếu thiếu dữ liệu
+        // fallback nếu thiếu dữ liệu
         if (project.getProjectName() == null) project.setProjectName("Không tên");
         if (project.getDeveloper() == null) project.setDeveloper("Không rõ");
         if (project.getCity() == null) project.setCity("Không rõ");
@@ -368,6 +375,20 @@ public class ProjectServiceImpl implements ProjectService {
         return project;
     }
 
+    private boolean containsAny(String line, String... keywords) {
+        for (String keyword : keywords) {
+            if (line.contains(keyword)) return true;
+        }
+        return false;
+    }
+
+    private String removeDiacritics(String str) {
+        return Normalizer.normalize(str, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .replace("đ", "d");
+    }
+
+
     // =================== OCR =====================
 
     public String extractTextFromImage(MultipartFile file) throws IOException, TesseractException {
@@ -375,49 +396,66 @@ public class ProjectServiceImpl implements ProjectService {
         File convFile = File.createTempFile("uploaded_", "." + ext);
         file.transferTo(convFile);
 
-        BufferedImage image = ImageIO.read(convFile);
-        if (image == null) {
+        BufferedImage originalImage = ImageIO.read(convFile);
+        if (originalImage == null) {
             throw new IllegalArgumentException("Không thể đọc ảnh hoặc định dạng không hỗ trợ: " + file.getOriginalFilename());
         }
 
+        // Tiền xử lý ảnh: chuyển sang grayscale và nhị phân (binarization)
+        BufferedImage processedImage = preprocessImage(convFile);
+
+
         Tesseract tesseract = new Tesseract();
-        File tessdataDir = extractTessdataFromResources();
+        File tessdataDir = extractTessdataFromResources(); // giữ nguyên như bạn có
         tesseract.setDatapath(tessdataDir.getAbsolutePath());
         tesseract.setLanguage("vie+eng");
 
-        String rawText = tesseract.doOCR(image);
-        return correctCommonMistakes(rawText);
+        // Tùy chỉnh cấu hình Tesseract
+        tesseract.setOcrEngineMode(1); // OEM_LSTM_ONLY
+        tesseract.setPageSegMode(3);  // PSM_AUTO (tự động xác định bố cục)
+
+        return tesseract.doOCR(processedImage);
     }
 
-    // =================== Fix lỗi OCR =====================
+    private BufferedImage preprocessImage(File imageFile) throws IOException {
+        // Đọc ảnh từ file
+        Mat image = opencv_imgcodecs.imread(imageFile.getAbsolutePath());
 
-    private String correctCommonMistakes(String text) {
-        java.util.Map<String, String> corrections = new HashMap<>();
-        corrections.put("°", "9");
-        corrections.put("¡", "i");
-        corrections.put("!", "I");
-        corrections.put("HC!", "HCM");
-        corrections.put("HCl", "HCM");
-        corrections.put("HCH", "HCM");
-        corrections.put("iiC", "HCM");
-        corrections.put("!CM", "HCM");
-        corrections.put("TP.!C!", "TP.HCM");
-        corrections.put("TP.HCH", "TP.HCM");
-        corrections.put("TP.iiC", "TP.HCM");
-
-        corrections.put("Dy án", "Dự án");
-        corrections.put("Dư án", "Dự án");
-        corrections.put("&", "ở");
-        corrections.put("mô tà", "mô tả");
-        corrections.put("trang thái", "trạng thái");
-        corrections.put("bat đầu", "bắt đầu");
-        corrections.put("hoan thành", "hoàn thành");
-
-        for (java.util.Map.Entry<String, String> entry : corrections.entrySet()) {
-            text = text.replace(entry.getKey(), entry.getValue());
+        // Resize nếu ảnh quá nhỏ (OCR kém với ảnh bé)
+        if (image.cols() < 800) {
+            double scale = 800.0 / image.cols();
+            opencv_imgproc.resize(image, image, new Size((int)(image.cols() * scale), (int)(image.rows() * scale)));
         }
 
-        return text;
+        // Chuyển grayscale
+        Mat gray = new Mat();
+        opencv_imgproc.cvtColor(image, gray, opencv_imgproc.COLOR_BGR2GRAY);
+
+        // Binarization – Adaptive threshold
+        Mat binary = new Mat();
+        opencv_imgproc.adaptiveThreshold(
+                gray, binary, 255,
+                opencv_imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
+                opencv_imgproc.THRESH_BINARY,
+                31, 10
+        );
+
+        // Giảm nhiễu nhẹ (median blur)
+        opencv_imgproc.medianBlur(binary, binary, 3);
+
+        // Chuyển sang BufferedImage để dùng cho Tesseract
+        return matToBufferedImage(binary);
+    }
+
+    private BufferedImage matToBufferedImage(Mat mat) throws IOException {
+        BytePointer bytePointer = new BytePointer();
+        opencv_imgcodecs.imencode(".png", mat, bytePointer);
+
+        byte[] byteArray = new byte[(int) bytePointer.limit()];
+        bytePointer.get(byteArray);
+        bytePointer.deallocate();
+
+        return ImageIO.read(new ByteArrayInputStream(byteArray));
     }
 
     // =================== Dữ liệu từng dòng =====================
@@ -437,12 +475,27 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     private LocalDate extractDate(String line) {
-        Matcher matcher = Pattern.compile("(\\d{2}/\\d{2}/\\d{4})").matcher(line);
+        // Dạng ngày hỗ trợ: 01/01/2022, 1-1-22, 12.5.2023...
+        Matcher matcher = Pattern.compile("(\\d{1,2}[-/\\.]{1}\\d{1,2}[-/\\.]{1}\\d{2,4})").matcher(line);
+
         if (matcher.find()) {
-            return LocalDate.parse(matcher.group(1), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            String rawDate = matcher.group(1).replace(".", "/").replace("-", "/"); // chuẩn hóa
+            DateTimeFormatter[] formatters = {
+                    DateTimeFormatter.ofPattern("d/M/yyyy"),
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                    DateTimeFormatter.ofPattern("d/M/yy"),
+                    DateTimeFormatter.ofPattern("dd/MM/yy")
+            };
+
+            for (DateTimeFormatter formatter : formatters) {
+                try {
+                    return LocalDate.parse(rawDate, formatter);
+                } catch (DateTimeParseException ignored) {}
+            }
         }
         return null;
     }
+
 
     // =================== Trích tessdata =====================
 
@@ -460,13 +513,5 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     // =================== Tiện ích =====================
-
-    private boolean containsAny(String line, String... keywords) {
-        for (String keyword : keywords) {
-            if (line.contains(keyword)) return true;
-        }
-        return false;
-    }
-
 
 }

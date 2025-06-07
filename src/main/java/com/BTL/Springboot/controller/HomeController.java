@@ -3,22 +3,13 @@ package com.BTL.Springboot.controller;
 import com.BTL.Springboot.dto.response.transaction.SaleTransactionDto;
 import com.BTL.Springboot.dto.response.transaction.TransactionDto;
 import com.BTL.Springboot.dto.response.user.UserAccountDto;
-import com.BTL.Springboot.entity.UserAccount;
-import com.BTL.Springboot.service.DashBoardService;
 import com.BTL.Springboot.service.TransactionService;
 import com.BTL.Springboot.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +18,6 @@ public class HomeController {
 
     @Autowired
     private UserAccountService userAccountService;
-
-    @Autowired
-    private DashBoardService dashboardService;
 
     @Autowired
     private TransactionService transactionService;
@@ -48,12 +36,12 @@ public class HomeController {
         }
 
         // Lấy thống kê dashboard
-        Map<String, Object> data = dashboardService.getDataComparison();
+        Map<String, Object> data = transactionService.getDataComparison();
         modelAndView.addAllObjects(data);
-        modelAndView.addObject("soldToday", dashboardService.getTotalSoldToday());
-        modelAndView.addObject("monthlyRevenue", dashboardService.getRevenueThisMonth());
-        modelAndView.addObject("customersThisYear", dashboardService.getCustomerThisYear());
-        modelAndView.addObject("activeEmployees", dashboardService.getActiveEmployees());
+        modelAndView.addObject("soldToday", transactionService.getTotalSoldToday());
+        modelAndView.addObject("monthlyRevenue", transactionService.getRevenueThisMonth());
+        modelAndView.addObject("customersThisYear", transactionService.getCustomerThisYear());
+
 
         // Lấy recent activities
         List<TransactionDto> recentActivities = transactionService.getRecentActivities();
@@ -71,7 +59,6 @@ public class HomeController {
 
         return modelAndView;
     }
-
 
     @GetMapping("/property.json")
     public String getJson() {

@@ -674,7 +674,7 @@
 
 
                             <div class="card-body">
-                                <h5 class="card-title">Hoạt động mua bán
+                                <h5 class="card-title">Doanh số gần đây
                                     <span th:switch="${salesFilter}">
                                     <span th:case="'today'">| Hôm nay</span>
                                     <span th:case="'month'">| Tháng này</span>
@@ -699,11 +699,11 @@
                                             0 đ
                                         </td>
                                         <td>
-  <span th:class="'badge ' + (${sale.status} == 'true' ? 'bg-success' :
-                               (${sale.status} == 'pending' ? 'bg-warning' : 'bg-danger'))"
-        th:text="${sale.status == 'true' ? 'Đã thanh toán' : (sale.status == 'pending' ? 'Đang xử lý' : 'Thất bại')}">
-    Trạng thái
-  </span>
+                                          <span th:class="'badge ' + (${sale.status} == 'true' ? 'bg-success' :
+                                                                       (${sale.status} == 'pending' ? 'bg-warning' : 'bg-danger'))"
+                                                th:text="${sale.status == 'true' ? 'Đã thanh toán' : (sale.status == 'pending' ? 'Đang xử lý' : 'Thất bại')}">
+                                            Trạng thái
+                                          </span>
                                         </td>
                                     </tr>
                                     </tbody>

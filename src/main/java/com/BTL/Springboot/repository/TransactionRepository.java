@@ -58,8 +58,13 @@ public interface TransactionRepository extends JpaRepository<Transaction,Integer
             "CONCAT(t.buyer.firstName, ' ', t.buyer.lastName), " +
             "t.property.title, t.price, t.status) " +
             "FROM Transaction t " +
-            "WHERE t.createdAt BETWEEN :start AND :end")
+            "WHERE t.createdAt BETWEEN :start AND :end " +
+            "ORDER BY t.createdAt DESC")
     List<SaleTransactionDto> findSalesBetween(@Param("start") LocalDateTime start,
-                                              @Param("end") LocalDateTime end);
+                                              @Param("end") LocalDateTime end,
+                                              Pageable pageable);
+
+    @Query("SELECT COUNT(t), SUM(t.price) FROM Transaction t WHERE t.createdAt BETWEEN :start AND :end")
+    List<Object[]> getSalesAndRevenueBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
 }

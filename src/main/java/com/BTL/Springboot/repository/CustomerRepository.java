@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,4 +17,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     @Query("SELECT COUNT(c) FROM Customer c WHERE YEAR(c.createdAt) = :year")
     long countByYear(@Param("year") int year);
+
+    @Query("SELECT COUNT(c) FROM Customer c WHERE c.createdAt BETWEEN :start AND :end")
+    Long getNewCustomersBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
 }

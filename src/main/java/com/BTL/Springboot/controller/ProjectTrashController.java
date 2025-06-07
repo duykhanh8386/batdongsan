@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/project")
-public class TrashController {
+public class ProjectTrashController {
 
     @Autowired
     private ProjectTrashServiceImpl projectTrashService;

@@ -4,9 +4,9 @@ import com.BTL.Springboot.dto.response.user.UserAccountDto;
 import com.BTL.Springboot.entity.Project;
 import com.BTL.Springboot.entity.Property;
 import com.BTL.Springboot.entity.PropertyType;
-import com.BTL.Springboot.service.Impl.ProjectServiceImpl;
-import com.BTL.Springboot.service.Impl.PropertyServiceImpl;
-import com.BTL.Springboot.service.Impl.PropertyTypeServiceImpl;
+import com.BTL.Springboot.service.ProjectService;
+import com.BTL.Springboot.service.PropertyService;
+import com.BTL.Springboot.service.PropertyTypeService;
 import com.BTL.Springboot.service.UserAccountService;
 import com.BTL.Springboot.util.ExcelExporterUtil;
 import com.BTL.Springboot.util.PDFExporterUtil;
@@ -26,13 +26,13 @@ import java.util.List;
 @RequestMapping("/project")
 public class ApartmentController {
     @Autowired
-    private ProjectServiceImpl projectService;
+    private ProjectService projectService;
 
     @Autowired
-    private PropertyServiceImpl propertyService;
+    private PropertyService propertyService;
 
     @Autowired
-    private PropertyTypeServiceImpl propertyTyperService;
+    private PropertyTypeService propertyTyperService;
 
     @Autowired
     private UserAccountService userAccountService;

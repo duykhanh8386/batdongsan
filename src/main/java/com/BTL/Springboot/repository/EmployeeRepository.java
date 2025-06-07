@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> findByFirstNameAndLastName(String firstName, String lastName);
+
+    long countByIsActiveTrue();
 }

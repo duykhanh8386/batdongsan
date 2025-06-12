@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Dashboard - NiceAdmin Bootstrap Template</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/favicon.png}" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Updated: Apr 20 2024 with Bootstrap v5.3.3
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <a th:href="@{/home}" class="logo text-align-center">
+            <div><img th:src="@{https://staticfile.batdongsan.com.vn/images/logo/standard/red/logo.svg}" alt=""></div>
+            <div><span class="d-none d-lg-block">NiceHomelander</span></div>
+        </a>
+        <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+        <form class="search-form d-flex align-items-center" method="POST" th:action="@{#}">
+            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+
+            <li class="nav-item d-block d-lg-none">
+                <a class="nav-link nav-icon search-bar-toggle " th:href="@{#}">
+                    <i class="bi bi-search"></i>
+                </a>
+            </li><!-- End Search Icon-->
+
+            <li class="nav-item dropdown">
+                <a class="nav-link nav-icon" th:href="@{#}" data-bs-toggle="dropdown">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge bg-primary badge-number">4</span>
+                </a><!-- End Notification Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                    <li class="dropdown-header">
+                        You have 4 new notifications
+                        <a th:href="@{#}"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="notification-item">
+                        <i class="bi bi-exclamation-circle text-warning"></i>
+                        <div>
+                            <h4>Lorem Ipsum</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>30 min. ago</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="notification-item">
+                        <i class="bi bi-x-circle text-danger"></i>
+                        <div>
+                            <h4>Atque rerum nesciunt</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>1 hr. ago</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="notification-item">
+                        <i class="bi bi-check-circle text-success"></i>
+                        <div>
+                            <h4>Sit rerum fuga</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>2 hrs. ago</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="notification-item">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        <div>
+                            <h4>Dicta reprehenderit</h4>
+                            <p>Quae dolorem earum veritatis oditseno</p>
+                            <p>4 hrs. ago</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li class="dropdown-footer">
+                        <a th:href="@{#}">Show all notifications</a>
+                    </li>
+                </ul><!-- End Notification Dropdown Items -->
+            </li><!-- End Notification Nav -->
+
+            <li class="nav-item dropdown">
+                <a class="nav-link nav-icon" th:href="@{#}" data-bs-toggle="dropdown">
+                    <i class="bi bi-chat-left-text"></i>
+                    <span class="badge bg-success badge-number">3</span>
+                </a><!-- End Messages Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                    <li class="dropdown-header">
+                        You have 3 new messages
+                        <a th:href="@{#}"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="message-item">
+                        <a th:href="@{#}">
+                            <img th:src="@{/assets/img/messages-1.jpg}" alt="" class="rounded-circle">
+                            <div>
+                                <h4>Maria Hudson</h4>
+                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                <p>4 hrs. ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="message-item">
+                        <a th:href="@{#}">
+                            <img th:src="@{/assets/img/messages-2.jpg}" alt="" class="rounded-circle">
+                            <div>
+                                <h4>Anna Nelson</h4>
+                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                <p>6 hrs. ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="message-item">
+                        <a th:href="@{#}">
+                            <img th:src="@{/assets/img/messages-3.jpg}" alt="" class="rounded-circle">
+                            <div>
+                                <h4>David Muldon</h4>
+                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
+                                <p>8 hrs. ago</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li class="dropdown-footer">
+                        <a th:href="@{#}">Show all messages</a>
+                    </li>
+                </ul><!-- End Messages Dropdown Items -->
+            </li><!-- End Messages Nav -->
+
+            <li class="nav-item dropdown pe-3">
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" th:href="@{#}" data-bs-toggle="dropdown">
+                    <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2"
+                          th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">T. Đạt</span>
+                </a><!-- End Profile Image Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6 th:text="${(user != null and user.employee != null) ? (user.employee.firstName + ' ' + user.employee.lastName) :
+                   ((user != null and user.customer != null) ? (user.customer.firstName + ' ' + user.customer.lastName) : 'Khách')}">
+                            Đỗ Tuấn Đạt</h6>
+                        <span th:text="${(user != null and user.role != null) ? user.role.roleName : 'Khách'}">Quản lý</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/users-profile.html}">
+                            <i class="bi bi-person"></i>
+                            <span>Hồ sơ của tôi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/users-profile.html}">
+                            <i class="bi bi-gear"></i>
+                            <span>Cài đặt</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/pages-faq.html}">
+                            <i class="bi bi-question-circle"></i>
+                            <span>Trợ giúp?</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/auth/logout}">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Đăng xuất</span>
+                        </a>
+                    </li>
+                </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+
+        </ul>
+    </nav><!-- End Icons Navigation -->
+
+</header><!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+        <li class="nav-item">
+            <a class="nav-link " th:href="@{/home}">
+                <i class="bi bi-grid"></i>
+                <span>Tổng quát</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-menu-button-wide"></i><span>Bất động sản</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/properties/for-sale}">
+                        <i class="bi bi-circle"></i><span>Bán</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/properties/for-rent}">
+                        <i class="bi bi-circle"></i><span>Cho thuê</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/deleted-property/all}">
+                        <i class="bi bi-circle"></i><span>Thùng rác</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Components Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-journal-text"></i><span>Dự án</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/project/apartments}">
+                        <i class="bi bi-circle"></i><span>Căn hộ chung cư</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/project/offices}">
+                        <i class="bi bi-circle"></i><span>Văn phòng</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/project/industrial-zones}">
+                        <i class="bi bi-circle"></i><span>Khu công nghiệp</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/project/houses}">
+                        <i class="bi bi-circle"></i><span>Nhà ở</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/project/trashs}">
+                        <i class="bi bi-circle"></i><span>Thùng rác</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Forms Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Giao dịch</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Đặt phòng</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Mua đất</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Hóa đơn</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Xuất/Hủy</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Tables Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-bar-chart"></i><span>Báo cáo</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="charts-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/charts-chartjs.html}">
+                        <i class="bi bi-circle"></i><span>Biểu đồ</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/charts-apexcharts.html}">
+                        <i class="bi bi-circle"></i><span>Báo cáo thị trường</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/charts-echarts.html}">
+                        <i class="bi bi-circle"></i><span>Doanh thu</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/charts-echarts.html}">
+                        <i class="bi bi-circle"></i><span>Tin tức</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Charts Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-gem"></i><span>Đối tác</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="icons-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/icons-bootstrap.html}">
+                        <i class="bi bi-circle"></i><span>Khách hàng</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/icons-remix.html}">
+                        <i class="bi bi-circle"></i><span>Nhà cung cấp</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Icons Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#staff-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Nhân viên</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="staff-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/employee}">
+                        <i class="bi bi-circle"></i><span>Nhân viên</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Lịch làm việc</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Chấm công</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Bảng tính lương</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Tables Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#sell-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Bán online</span><i
+                    class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="sell-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Website</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-general.html}">
+                        <i class="bi bi-circle"></i><span>Facebook Fanpage</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/tables-data.html}">
+                        <i class="bi bi-circle"></i><span>Wiki BDS</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Tables Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#money-nav" data-bs-toggle="collapse" th:href="@{#}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Sổ quỹ</span>
+            </a>
+        </li><!-- End Số quỹ -->
+
+        <li class="nav-item">
+            <a th:href="@{/properties/statistical-chart}" class="nav-link collapsed">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Báo cáo & Thống kê</span>
+            </a>
+        </li><!-- End Profile Page Nav -->
+
+    </ul>
+
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main" th:fragment="main-content">
+
+    <div class="pagetitle">
+        <h1>Tổng quan</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/index}">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Tổng quan</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+
+            <!-- Left side columns -->
+            <div class="col-lg-8">
+                <div class="row">
+
+                    <!-- Sales Card -->
+                    <div class="col-xxl-4 col-md-6">
+                        <div class="card info-card sales-card shadow-sm rounded">
+                            <div class="card-body">
+                                <h5 class="card-title">Đã bán <span class="text-muted fs-6">| Hôm nay</span></h5>
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary">
+                                        <i class="bi bi-cart"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6 th:text="${soldToday}">0</h6>
+                                        <span th:if="${soldChangePercent != null}"
+                                              th:classappend="${soldChangePercent > 0} ? 'text-success' : 'text-danger'">
+                                          <i th:classappend="${soldChangePercent > 0} ? 'bi bi-arrow-up-short' : 'bi bi-arrow-down-short'"></i>
+                                        <span th:text="${#numbers.formatDecimal(soldChangePercent, 1, 'COMMA', 1, 'POINT')} + '%'">0%</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- End Sales Card -->
+
+                    <!-- Revenue Card -->
+                    <div class="col-xxl-4 col-md-6">
+                        <div class="card info-card revenue-card shadow-sm rounded">
+                            <div class="card-body">
+                                <h5 class="card-title">Doanh thu <span class="text-muted fs-6">| Tháng này</span></h5>
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success">
+                                        <i class="bi bi-currency-dollar"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6 class="mb-1 text-truncate">
+                                            <!-- >= 1 tỷ -->
+                                            <span th:if="${monthlyRevenue >= 1000000000}"
+                                                  th:text="${#numbers.formatDecimal(monthlyRevenue / 1000000000, 1, 'COMMA', 1, 'POINT')} + ' tỷ'"></span>
+                                            <!-- >= 1 triệu -->
+                                            <span th:if="${monthlyRevenue >= 1000000 and monthlyRevenue < 1000000000}"
+                                                  th:text="${#numbers.formatDecimal(monthlyRevenue / 1000000, 1, 'COMMA', 1, 'POINT')} + ' triệu'"></span>
+                                            <!-- >= 1 nghìn -->
+                                            <span th:if="${monthlyRevenue >= 1000 and monthlyRevenue < 1000000}"
+                                                  th:text="${#numbers.formatDecimal(monthlyRevenue / 1000, 0, 'COMMA', 0, 'POINT')} + ' nghìn'"></span>
+                                            <!-- < 1000 -->
+                                            <span th:if="${monthlyRevenue < 1000}"
+                                                  th:text="${#numbers.formatDecimal(monthlyRevenue, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                        </h6>
+                                        <span th:if="${revenueChangePercent != null}"
+                                              th:classappend="${revenueChangePercent > 0} ? 'text-success' : 'text-danger'">
+                                          <i th:classappend="${revenueChangePercent > 0} ? 'bi bi-arrow-up-short' : 'bi bi-arrow-down-short'"></i>
+                                          <span th:text="${#numbers.formatDecimal(revenueChangePercent, 1, 'COMMA', 1, 'POINT')} + '%'">0%</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- End Revenue Card -->
+
+                    <!-- Customers Card -->
+                    <div class="col-xxl-4 col-xl-12">
+                        <div class="card info-card customers-card shadow-sm rounded">
+                            <div class="card-body">
+                                <h5 class="card-title">Khách hàng <span class="text-muted fs-6">| Năm nay</span></h5>
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-info bg-opacity-10 text-info">
+                                        <i class="bi bi-people"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6 th:text="${customersThisYear}">0</h6>
+                                        <span th:if="${customerChangePercent != null}"
+                                              th:classappend="${customerChangePercent > 0} ? 'text-success' : 'text-danger'">
+                                          <i th:classappend="${customerChangePercent > 0} ? 'bi bi-arrow-up-short' : 'bi bi-arrow-down-short'"></i>
+                                          <span th:text="${#numbers.formatDecimal(customerChangePercent, 1, 'COMMA', 1, 'POINT')} + '%'">0%</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- End Customers Card -->
+
+                    <!-- Reports -->
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Bộ lọc</h6>
+                                    </li>
+
+                                    <li><a class="dropdown-item chart-filter-option" data-range="today" href="#">Hôm nay</a></li>
+                                    <li><a class="dropdown-item chart-filter-option" data-range="month" href="#">Tháng này</a></li>
+                                    <li><a class="dropdown-item chart-filter-option" data-range="year" href="#">Năm nay</a></li>
+
+                                </ul>
+                            </div>
+
+                            <div class="card-body">
+                                <h5 class="card-title" id="report-chart-title">Biểu đồ báo cáo<span>/Hôm nay</span></h5>
+
+                                <!-- Biểu đồ 1: Doanh thu -->
+                                <div id="revenueChart" class="mb-4"></div>
+                                <!-- Biểu đồ 2: Đã bán + Khách hàng -->
+                                <div id="salesCustomerChart" class="mt-4"></div>
+
+                                <script>
+                                    let revenueChart, salesCustomerChart;
+
+                                    function loadChartData(range) {
+                                      fetch(`/api/report-data?range=${range}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                          // Cập nhật biểu đồ Doanh thu
+                                          revenueChart.updateSeries([{ name: 'Doanh thu', data: data.revenue }]);
+                                          revenueChart.updateOptions({ xaxis: { categories: data.categories } });
+
+                                          // Cập nhật biểu đồ Đã bán + Khách hàng
+                                          salesCustomerChart.updateSeries([
+                                            { name: 'Đã bán', data: data.sold },
+                                            { name: 'Khách hàng', data: data.customers }
+                                          ]);
+                                          salesCustomerChart.updateOptions({ xaxis: { categories: data.categories } });
+
+                                          // Cập nhật tiêu đề
+                                          document.querySelector("#report-chart-title span").textContent = "/" + data.label;
+                                        });
+                                    }
+
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                      const commonOptions = {
+                                        chart: { height: 350, type: 'area', toolbar: { show: false } },
+                                        markers: { size: 4 },
+                                        fill: {
+                                          type: "gradient",
+                                          gradient: {
+                                            shadeIntensity: 1,
+                                            opacityFrom: 0.3,
+                                            opacityTo: 0.4,
+                                            stops: [0, 90, 100]
+                                          }
+                                        },
+                                        dataLabels: { enabled: false },
+                                        stroke: { curve: 'smooth', width: 2 },
+                                        xaxis: { type: 'datetime', categories: [] },
+                                        tooltip: { x: { format: 'dd/MM/yy HH:mm' } }
+                                      };
+
+                                      // Khởi tạo biểu đồ Doanh thu
+                                      revenueChart = new ApexCharts(document.querySelector("#revenueChart"), {
+                                      ...commonOptions,
+                                      series: [{ name: 'Doanh thu', data: [0] }],
+                                      colors: ['#2eca6a'],
+                                      legend: {
+                                        show: true,
+                                        position: 'bottom',
+                                        horizontalAlign: 'center'
+                                      }
+                                    });
+
+                                      revenueChart.render();
+
+                                      // Khởi tạo biểu đồ Đã bán + Khách hàng
+                                      salesCustomerChart = new ApexCharts(document.querySelector("#salesCustomerChart"), {
+                                        ...commonOptions,
+                                        series: [
+                                          { name: 'Đã bán', data: [0] },
+                                          { name: 'Khách hàng', data: [0] }
+                                        ],
+                                        colors: ['#4154f1', '#ff771d'],
+                                        legend: {
+                                          show: true,
+                                          position: 'bottom',
+                                          horizontalAlign: 'center'
+                                        }
+                                      });
+                                      salesCustomerChart.render();
+
+                                      // Load mặc định
+                                      loadChartData('month');
+
+                                      // Gắn sự kiện cho filter
+                                      document.querySelectorAll(".chart-filter-option").forEach(el => {
+                                        el.addEventListener("click", function () {
+                                          const range = this.dataset.range;
+                                          loadChartData(range);
+                                        });
+                                      });
+                                    });
+                                </script>
+                            </div>
+                            <!-- End Line Chart -->
+                        </div>
+                    </div><!-- End Reports -->
+
+                    <!-- Recent Sales -->
+                    <div class="col-12">
+                        <div class="card recent-sales overflow-auto">
+
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Bộ lọc</h6>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" th:href="@{/home(salesFilter='today')}">Hôm nay</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" th:href="@{/home(salesFilter='month')}">Tháng này</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" th:href="@{/home(salesFilter='year')}">Năm nay</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                            <div class="card-body">
+                                <h5 class="card-title">Doanh số gần đây
+                                    <span th:switch="${salesFilter}">
+                                    <span th:case="'today'">| Hôm nay</span>
+                                    <span th:case="'month'">| Tháng này</span>
+                                    <span th:case="'year'">| Năm nay</span>
+                                  </span>
+                                </h5>
+
+                                <table class="table table-borderless datatable">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Tên khách hàng</th>
+                                        <th scope="col">Tên bất động sản</th>
+                                        <th scope="col">Giá</th>
+                                        <th scope="col">Trạng thái</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="sale : ${salesList}">
+                                        <td th:text="${sale.customerName}">Tên KH</td>
+                                        <td th:text="${sale.propertyTitle}">Tên BĐS</td>
+                                        <td th:text="${#numbers.formatDecimal(sale.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                                            0 đ
+                                        </td>
+                                        <td>
+                                          <span th:switch="${sale.status}">
+                                              <span th:case="'COMPLETED'" class="badge bg-success">Đã hoàn thành</span>
+                                              <span th:case="'PENDING'" class="badge bg-warning">Đang chờ xử lý</span>
+                                              <span th:case="'CANCELLED'" class="badge bg-danger">Đã hủy</span>
+                                              <span th:case="'FAILED'" class="badge bg-danger">Đã thất bại</span>
+                                              <span th:case="'AWAITING_PAYMENT'" class="badge bg-info">Đang chờ thanh toán</span>
+                                              <span th:case="'DEPOSITED'" class="badge bg-secondary">Đã đặt cọc</span>
+                                              <span th:case="'IN_PROGRESS'" class="badge bg-danger">Đang được xử lý</span>
+                                              <span th:case="'AWAITING_SIGNATURE'" class="badge bg-warning">Chờ ký hợp đồng</span>
+                                              <span th:case="'SIGNED'" class="badge bg-dark">Đã ký kết hợp đồng</span>
+                                              <span th:case="'TRANSFERRED'" class="badge bg-success">Quyền đã chuyển giao</span>
+                                              <span th:case="'REFUNDED'" class="badge bg-secondary">Đã hoàn tiền</span>
+                                              <span th:case="'ON_HOLD'" class="badge bg-warning">Đã tạm dừng</span>
+                                              <span th:case="*" class="badge bg-light text-dark">Unknown</span>
+                                          </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div><!-- End Recent Sales -->
+
+                </div>
+            </div><!-- End Left side columns -->
+
+            <!-- Right side columns -->
+            <div class="col-lg-4">
+
+                <!-- Recent Activity -->
+                <div class="card">
+
+                    <div class="card-body">
+                        <h5 class="card-title">Hoạt động gần đây <span>| Hôm nay</span></h5>
+                        <div class="activity">
+                            <div class="activity-item d-flex" th:each="activity, stat : ${recentActivities}"
+                                 th:with="i=${stat.index}">
+                                <div class="activite-label" th:text="${activity.timeAgo}">Time</div>
+
+                                <th:block th:switch="${i % 6}">
+                                    <i class="bi bi-circle-fill activity-badge"
+                                       th:case="0" th:classappend="' text-success'"></i>
+                                    <i class="bi bi-circle-fill activity-badge"
+                                       th:case="1" th:classappend="' text-danger'"></i>
+                                    <i class="bi bi-circle-fill activity-badge"
+                                       th:case="2" th:classappend="' text-primary'"></i>
+                                    <i class="bi bi-circle-fill activity-badge"
+                                       th:case="3" th:classappend="' text-info'"></i>
+                                    <i class="bi bi-circle-fill activity-badge"
+                                       th:case="4" th:classappend="' text-warning'"></i>
+                                    <i class="bi bi-circle-fill activity-badge"
+                                       th:case="*"
+                                       th:classappend="' text-secondary'"></i>
+                                </th:block>
+
+                                <div class="activity-content">
+                                    <a href="#" class="fw-bold text-dark" th:text="${activity.agentName}">Nguyễn Văn
+                                        A</a>
+                                    vừa tạo hóa đơn với giá trị
+                                    <a href="#" class="fw-bold text-dark"
+                                       th:text="${#numbers.formatDecimal(activity.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">0
+                                        đ</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--End Recent Activity -->
+
+                <!-- Budget Report -->
+                <div class="card">
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Filter</h6>
+                            </li>
+                            <li><a class="dropdown-item" th:href="@{/home(statusFilter='today')}">Hôm nay</a></li>
+                            <li><a class="dropdown-item" th:href="@{/home(statusFilter='thisMonth')}">Tháng này</a></li>
+                            <li><a class="dropdown-item" th:href="@{/home(statusFilter='thisYear')}">Năm nay</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card-body pb-0">
+                        <h5 class="card-title">Báo cáo trạng thái giao dịch <span th:text="'| ' + ${statusFilter == 'today' ? 'Hôm nay' : statusFilter == 'thisMonth' ? 'Tháng này' : 'Năm nay'}"></span></h5>
+
+                        <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
+
+                        <script th:inline="javascript">
+                            document.addEventListener("DOMContentLoaded", () => {
+                                var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
+                                    legend: {
+                                        data: ['Bán', 'Cho thuê']
+                                    },
+                                    radar: {
+                                        indicator: /*[[${indicators}]]*/,
+                                        name: {
+                                            textStyle: {
+                                                fontSize: 10
+                                            }
+                                        }
+                                    },
+                                    series: [{
+                                        name: 'Budget vs spending',
+                                        type: 'radar',
+                                        data: /*[[${series}]]*/
+                                    }]
+                                });
+                            });
+                        </script>
+                    </div>
+                </div><!-- End Budget Report -->
+
+                <!-- Website Traffic -->
+                <div class="card">
+                    <div class="filter">
+                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <li class="dropdown-header text-start">
+                                <h6>Bộ lọc</h6>
+                            </li>
+
+                            <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                            <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                            <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="card-body pb-0">
+                        <h5 class="card-title">Lượng truy cập <span>| Hôm nay</span></h5>
+
+                        <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                              echarts.init(document.querySelector("#trafficChart")).setOption({
+                                tooltip: {
+                                  trigger: 'item'
+                                },
+                                legend: {
+                                  top: '5%',
+                                  left: 'center'
+                                },
+                                series: [{
+                                  name: 'Access From',
+                                  type: 'pie',
+                                  radius: ['40%', '70%'],
+                                  avoidLabelOverlap: false,
+                                  label: {
+                                    show: false,
+                                    position: 'center'
+                                  },
+                                  emphasis: {
+                                    label: {
+                                      show: true,
+                                      fontSize: '18',
+                                      fontWeight: 'bold'
+                                    }
+                                  },
+                                  labelLine: {
+                                    show: false
+                                  },
+                                  data: [{
+                                      value: 1048,
+                                      name: 'Search Engine'
+                                    },
+                                    {
+                                      value: 735,
+                                      name: 'Direct'
+                                    },
+                                    {
+                                      value: 580,
+                                      name: 'Email'
+                                    },
+                                    {
+                                      value: 484,
+                                      name: 'Union Ads'
+                                    },
+                                    {
+                                      value: 300,
+                                      name: 'Video Ads'
+                                    }
+                                  ]
+                                }]
+                              });
+                            });
+                        </script>
+
+                    </div>
+                </div><!-- End Website Traffic -->
+            </div><!-- End Right side columns -->
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+    <div class="copyright">
+        © Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+</footer><!-- End Footer -->
+
+<a th:href="@{#}" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>
